@@ -3,7 +3,7 @@ from pico2d import *
 open_canvas()
 
 background = load_image('town.png')
-player = load_image('player_resource/Player_Standing.png')
+player = load_image('player_resource/2DGP.png')
 land = load_image('grass.png')
 
 def print_map(  type ) :
@@ -17,16 +17,27 @@ def print_map(  type ) :
 
 def set_player(type) :
     global player
-    global frame
-    if type == 0 :
-        player = load_image('player_resource/Player_Standing.png')
-        player.draw(x,y)
-    elif type == 1 :
-        player = load_image('player_resource/wark.png')
-        player.clip_draw(frame * 100 , 0 ,100, 100,x,y)
-    elif type == 2 :
-        player = load_image('player_resource/jump.png')
-        player.draw(x,y)
+    global idle_frame
+    global run_frame
+    if type == 0 : #idle
+        if last_dir == 1 or last_dir == 0:
+            player.clip_draw(idle_frame * 100,100 * 3,100,100,x,y)
+            idle_frame = (idle_frame + 1) % 4
+        elif last_dir == -1 :
+            player.clip_draw(idle_frame * 100,100 * 2,100,100,x,y)
+            idle_frame = (idle_frame + 1) % 4
+    elif type == 1 : #run
+        if dir == 1 :
+            player.clip_draw(run_frame * 100,100 * 1,100,100,x,y)
+            run_frame = (run_frame + 1) % 7
+        elif dir == -1 :
+            player.clip_draw(run_frame * 100,100 * 0,100,100,x,y)
+            run_frame = (run_frame + 1) % 7
+    elif type == 2 : #jump
+        if dir == 1 or dir == 0:
+            player.clip_draw(5 * 100, 100* 3,100,100,x,y)
+        elif dir == -1:
+            player.clip_draw(5 * 100, 100* 2,100,100,x,y)
 
 def Handle_events() :
     global x
@@ -34,6 +45,7 @@ def Handle_events() :
     global running
     global dir
     global pl_draw
+    global last_dir
     events = get_events()
     for event in events :
         if event.type == SDL_QUIT :
@@ -53,19 +65,23 @@ def Handle_events() :
         elif event.type == SDL_KEYUP :
             if event.key == SDLK_d :
                 dir = 0
+                last_dir = 1
                 pl_draw = 0
             elif event.key == SDLK_a :
                 dir = 0
+                last_dir = -1
                 pl_draw = 0
             elif event.key == SDLK_w :
                 y = 90
                 pl_draw = 0
 
 
-frame = 0;
+idle_frame = 0
+run_frame = 0
 x = 800 // 2
 y = 90
 dir = 0
+last_dir = 0
 running = True
 pl_draw = 0
 map_draw = 0
@@ -77,12 +93,11 @@ while running :
     update_canvas()
 
     Handle_events()
-    frame = (frame + 1) % 4
     if x < 800 and dir == 1 :
-        x += dir * 5
+        x += dir * 7
     if x > 0 and dir == -1 :
-        x += dir * 5
-    delay(0.01)
+        x += dir * 7
+    delay(0.03)
 
 
 close_canvas()
