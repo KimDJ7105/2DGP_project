@@ -2,16 +2,25 @@ from pico2d import *
 
 open_canvas()
 
-background = load_image('town.png')
+background = load_image('map/town.png')
 player = load_image('player_resource/2DGP.png')
-land = load_image('grass.png')
+land = load_image('map/grass.png')
+
+class Cat :
+    pass
 
 def print_map(  type ) :
     global land
     global background
     if type == 0 :
-        background = load_image('town.png')
-        land = load_image('grass.png')
+        background = load_image('map/town.png')
+        land = load_image('map/grass.png')
+    if type == 1 :
+        background = load_image('map/desert.png')
+    if type == 2:
+        background = load_image('map/snowland.png')
+    if type == 3:
+        background = load_image('map/volcano.png')
     background.draw(400,300,800,600)
     land.draw(400,30)
 
@@ -44,7 +53,7 @@ def Handle_events() :
     global y
     global running
     global dir
-    global pl_draw
+    global pl_draw, map_draw
     global last_dir
     events = get_events()
     for event in events :
@@ -60,7 +69,7 @@ def Handle_events() :
                 dir = -1
                 pl_draw = 1
             elif event.key == SDLK_w :
-                y = 140
+                
                 pl_draw = 2
         elif event.type == SDL_KEYUP :
             if event.key == SDLK_d :
@@ -85,6 +94,7 @@ last_dir = 0
 running = True
 pl_draw = 0
 map_draw = 0
+jump = False
 
 while running :
     clear_canvas()
@@ -97,7 +107,15 @@ while running :
         x += dir * 7
     if x > 0 and dir == -1 :
         x += dir * 7
-    delay(0.03)
+    if jump :
+        if y < 140 :
+            y += 5
+        else :
+            jump = False
+    else :
+        if y > 90 :
+            y -= 5
+    delay(0.01)
 
 
 close_canvas()
