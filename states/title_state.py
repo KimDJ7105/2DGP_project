@@ -1,8 +1,8 @@
 from pico2d import *
 from random import randint
 import game_framework
-import play_state
-import map_class
+import states.play_state as play_state
+import classes.map_class as map_class
 
 
 map = None
