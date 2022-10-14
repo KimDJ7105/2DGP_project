@@ -37,7 +37,7 @@ def set_player(type) :
             idle_frame = (idle_frame + 1) % 4
     elif type == 1 : #run
         if dir == 1 :
-            player.clip_draw(run_frame * 100,100 * 1,100,100,x,y)
+            player.clip_draw(run_)
             run_frame = (run_frame + 1) % 7
         elif dir == -1 :
             player.clip_draw(run_frame * 100,100 * 0,100,100,x,y)
