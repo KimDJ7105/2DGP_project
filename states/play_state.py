@@ -21,7 +21,7 @@ def exit():
 def update():
     cat.frame_update()
     cat.move()
-    
+    cat.regen_stamina()
     pass
 
 def draw():
@@ -44,7 +44,7 @@ def handle_events():
             elif event.key == SDLK_d :
                 cat.set_dir(1)
             elif event.key == SDLK_SPACE :
-                cat.set_role(True)
+                cat.set_roll(True)
             elif event.key == SDLK_m :
                 game_framework.push_state(map_select_state)
         elif event.type == SDL_KEYUP :

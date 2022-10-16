@@ -3,6 +3,8 @@ from pico2d import *
 class Player :
     def __init__(self) :
         self.sprite = load_image('player/2DGP.png')
+        self.heart = load_image('player/heart.png')
+        self.stamina_bar = load_image('player/stamina_bar.png')
         self.x = 400
         self.y = 90
         self.hp = 5
@@ -12,25 +14,44 @@ class Player :
         self.last_dir = 0
         self.line = 5 #sprite line
         self.jump = False
-        self.role = False
-        self.role_count = 0
+        self.roll = False
+        self.roll_count = 0
+        self.stamina = 100
 
     def draw(self) :
         self.sprite.clip_draw(self.frame * 100, self.line * 100 ,100, 100, self.x, self.y)
+        self.draw_heart()
+        self.draw_stamina()
+
+    def draw_heart(self) :
+        tem_x = 50
+        tem_y = 550
+        for i in range(0,self.hp) :
+            self.heart.draw(tem_x,tem_y,50,50)
+            tem_x += 60
+
+    def draw_stamina(self) :
+        self.stamina_bar.draw(400,550,self.stamina,25)
+
+    def regen_stamina(self) :
+        if self.stamina < 100 :
+            self.stamina += 5
+        if self.stamina > 100 :
+            self.stamina = 100
 
     def move(self) :
-        if self.role == True :
+        if self.roll == True :
             if self.last_dir == 0 or self.last_dir == 1 :
-                if self.x < 800 and self.role_count == 10:
+                if self.x < 800 and self.roll_count == 10:
                     self.x += 30
             elif self.last_dir == -1 :
-                if self.x > 0 and self.role_count == 10 :
+                if self.x > 0 and self.roll_count == 10 :
                     self.x -= 30
             if self.frame == 3 :
-                self.role = False
+                self.roll = False
                 self.set_dir(self.last_dir)
                 self.set_dir(0)
-        elif self.role == False :
+        elif self.roll == False :
             if self.jump == False : #not jump or in mid air
                 if self.y < 90 :
                     self.y = 90
@@ -63,13 +84,13 @@ class Player :
     def frame_update(self) :
         if self.line == 2 or self.line == 3 :
             self.frame = (self.frame + 1) % 7
-        elif self.line == 4 or self.line == 5 and self.role == False:
+        elif self.line == 4 or self.line == 5 and self.roll == False:
             self.frame = (self.frame + 1) % 4
-        elif self.role == True :
-            self.role_count += 1
-            if self.role_count == 11 :
+        elif self.roll == True :
+            self.roll_count += 1
+            if self.roll_count == 11 :
                 self.frame += 1
-                self.role_count = 0
+                self.roll_count = 0
 
     def set_line(self,num) :
         self.line = num
@@ -88,12 +109,13 @@ class Player :
                 self.set_line(5)
 
     def set_jump(self, jump_bool) :
-        if self.role == False and self.y == 90:
+        if self.roll == False and self.y == 90:
             self.jump = jump_bool
 
-    def set_role(self, role_bool) :
-        if self.role == False :
-            self.role = role_bool
+    def set_roll(self, roll_bool) :
+        if self.roll == False and self.stamina > 30:
+            self.roll = roll_bool
+            self.stamina -= 30
             self.frame = 1
             if self.last_dir == 0 or self.last_dir == 1:
                 self.line = 1
