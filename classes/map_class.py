@@ -12,6 +12,7 @@ class Map :
 
     def set_map_type(self,num) :
         self.map_type = num
+        self.set_image()
 
     def set_image(self) :
         if self.map_type == 0 : #town

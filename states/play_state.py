@@ -2,6 +2,7 @@ from pico2d import *
 import game_framework
 import classes.map_class as map_class
 import classes.player_class as player_class
+import states.map_select_state as map_select_state
 
 map = None
 cat = None
@@ -20,6 +21,7 @@ def exit():
 def update():
     cat.frame_update()
     cat.move()
+    
     pass
 
 def draw():
@@ -44,6 +46,8 @@ def handle_events():
                 cat.set_dir(1)
             elif event.key == SDLK_SPACE :
                 pass
+            elif event.key == SDLK_m :
+                game_framework.push_state(map_select_state)
         elif event.type == SDL_KEYUP :
             if event.key == SDLK_a or event.key == SDLK_d:
                 cat.set_dir(0)
