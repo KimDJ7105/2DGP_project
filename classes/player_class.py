@@ -35,7 +35,7 @@ class Player :
 
     def regen_stamina(self) :
         if self.stamina < 100 :
-            self.stamina += 5
+            self.stamina += 1
         if self.stamina > 100 :
             self.stamina = 100
 

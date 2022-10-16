@@ -29,6 +29,7 @@ def draw():
     map.draw()
     cat.draw()
     update_canvas()
+    delay(0.02)
 
 
 def handle_events():
@@ -39,8 +40,6 @@ def handle_events():
                 cat.set_jump(True)
             elif event.key == SDLK_a :
                 cat.set_dir(-1)
-            elif event.key == SDLK_s :
-                pass
             elif event.key == SDLK_d :
                 cat.set_dir(1)
             elif event.key == SDLK_SPACE :
