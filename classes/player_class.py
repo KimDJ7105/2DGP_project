@@ -15,11 +15,11 @@ class Player :
         self.line = 5 #sprite line
         self.jump = False
         self.roll = False
-        self.roll_count = 0
         self.stamina = 100
+        self.size = 100
 
     def draw(self) :
-        self.sprite.clip_draw(self.frame * 100, self.line * 100 ,100, 100, self.x, self.y)
+        self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, self.x, self.y)
         self.draw_heart()
         self.draw_stamina()
 
@@ -35,18 +35,12 @@ class Player :
 
     def regen_stamina(self) :
         if self.stamina < 100 :
-            self.stamina += 1
+            self.stamina += 0.1
         if self.stamina > 100 :
             self.stamina = 100
 
     def move(self) :
         if self.roll == True :
-            if self.last_dir == 0 or self.last_dir == 1 :
-                if self.x < 800 and self.roll_count == 10:
-                    self.x += 30
-            elif self.last_dir == -1 :
-                if self.x > 0 and self.roll_count == 10 :
-                    self.x -= 30
             if self.frame == 3 :
                 self.roll = False
                 self.set_dir(self.last_dir)
@@ -87,10 +81,13 @@ class Player :
         elif self.line == 4 or self.line == 5 and self.roll == False:
             self.frame = (self.frame + 1) % 4
         elif self.roll == True :
-            self.roll_count += 1
-            if self.roll_count == 11 :
-                self.frame += 1
-                self.roll_count = 0
+            self.frame += 1
+            if self.last_dir == 0 or self.last_dir == 1 :
+                if self.x < 800 :
+                    self.x += 30
+            elif self.last_dir == -1 :
+                if self.x > 0 :
+                    self.x -= 30
 
     def set_line(self,num) :
         self.line = num
