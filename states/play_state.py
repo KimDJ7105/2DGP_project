@@ -6,10 +6,13 @@ import states.map_select_state as map_select_state
 
 map = None
 cat = None
+frame_rate = None
 
 def enter() :
     global map
     global cat
+    global frame_rate
+    frame_rate = 0
     map = map_class.Map()
     cat = player_class.Player()
 
@@ -19,17 +22,18 @@ def exit():
     del cat
 
 def update():
-    cat.frame_update()
+    global frame_rate
+    frame_rate = (frame_rate + 1) % 30
+    if frame_rate == 29 :
+        cat.frame_update()
     cat.move()
     cat.regen_stamina()
-    pass
 
 def draw():
     clear_canvas()
     map.draw()
     cat.draw()
     update_canvas()
-    delay(0.02)
 
 
 def handle_events():
