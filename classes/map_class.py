@@ -5,10 +5,15 @@ class Map :
         self.land = load_image('map/grass.png')
         self.background = load_image('map/town.png')
         self.map_type = 0
+        self.map_x = 0
 
     def draw(self) :
         self.background.draw(400,300,800,600)
         self.land.draw(400,30)
+
+    def draw_wide(self) :
+        self.background.draw(400,300,800,600)
+        self.land.clip_draw(self.map_x,0,800,60,400,30)
 
     def set_map_type(self,num) :
         self.map_type = num

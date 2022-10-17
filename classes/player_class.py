@@ -19,7 +19,12 @@ class Player :
         self.size = 100
 
     def draw(self) :
-        self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, self.x, self.y)
+        if self.x > 400 and self.x < 2000 : 
+            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400, self.y)
+        elif self.x < 400 :
+            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, self.x, self.y)
+        elif self.x > 2000 :
+            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400 + (self.x - 2000), self.y)
         self.draw_heart()
         self.draw_stamina()
 
@@ -72,7 +77,7 @@ class Player :
                         self.frame = 0
                 elif self.y >= 160 :
                     self.jump = False
-            if self.dir == -1 and self.x > 0 or self.dir == 1 and self.x < 800: #left or right
+            if self.dir == -1 and self.x > 0 or self.dir == 1 and self.x < 2400: #left or right
                 self.x += 2* self.dir
 
     def frame_update(self) :
@@ -118,3 +123,6 @@ class Player :
                 self.line = 1
             elif self.last_dir == -1 :
                 self.line = 0
+
+    def attack(self) :
+        pass
