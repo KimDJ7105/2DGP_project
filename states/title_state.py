@@ -14,7 +14,7 @@ def enter():
     global image_player, map
     global frame, title
     frame = 0
-    image_player = load_image('player/2DGP.png')
+    image_player = load_image('player/standard.png')
     title = load_image('menus/title.png')
     map = map_class.Map()
     map.set_map_type(randint(0,4))

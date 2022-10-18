@@ -14,6 +14,8 @@ def enter() :
     global frame_rate
     frame_rate = 0
     map = map_class.Map()
+    map.set_map_type(0)
+    map.set_image()
     cat = player_class.Player()
 
 def exit():
@@ -27,11 +29,12 @@ def update():
     if frame_rate == 29 :
         cat.frame_update()
     cat.move()
+    map.map_move(cat.x)
     cat.regen_stamina()
 
 def draw():
     clear_canvas()
-    map.draw()
+    map.draw_wide()
     cat.draw()
     update_canvas()
 
@@ -46,6 +49,9 @@ def handle_events():
                 cat.set_dir(-1)
             elif event.key == SDLK_d :
                 cat.set_dir(1)
+            elif event.key == SDLK_s :
+                if cat.x > 1860 and cat.x < 2000 :
+                    game_framework.push_state(map_select_state)
             elif event.key == SDLK_SPACE :
                 cat.set_roll(True)
             elif event.key == SDLK_m :
