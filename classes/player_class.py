@@ -2,7 +2,7 @@ from pico2d import *
 
 class Player :
     def __init__(self) :
-        self.sprite = load_image('player/2DGP.png')
+        self.sprite = load_image('player/standard.png')
         self.heart = load_image('player/heart.png')
         self.stamina_bar = load_image('player/stamina_bar.png')
         self.x = 400
@@ -19,12 +19,12 @@ class Player :
         self.size = 100
 
     def draw(self) :
-        if self.x > 400 and self.x < 2000 : 
+        if self.x > 400 and self.x < 1600 : 
             self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400, self.y)
-        elif self.x < 400 :
+        elif self.x <= 400 :
             self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, self.x, self.y)
-        elif self.x > 2000 :
-            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400 + (self.x - 2000), self.y)
+        elif self.x >= 1600 :
+            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400 + (self.x - 1600), self.y)
         self.draw_heart()
         self.draw_stamina()
 
@@ -46,7 +46,7 @@ class Player :
 
     def move(self) :
         if self.roll == True :
-            if self.frame == 3 :
+            if self.frame == 4 :
                 self.roll = False
                 self.set_dir(self.last_dir)
                 self.set_dir(0)
@@ -77,7 +77,7 @@ class Player :
                         self.frame = 0
                 elif self.y >= 160 :
                     self.jump = False
-            if self.dir == -1 and self.x > 0 or self.dir == 1 and self.x < 2400: #left or right
+            if self.dir == -1 and self.x > 0 or self.dir == 1 and self.x < 2000: #left or right
                 self.x += 2* self.dir
 
     def frame_update(self) :
@@ -88,7 +88,7 @@ class Player :
         elif self.roll == True :
             self.frame += 1
             if self.last_dir == 0 or self.last_dir == 1 :
-                if self.x < 800 :
+                if self.x < 2000 :
                     self.x += 30
             elif self.last_dir == -1 :
                 if self.x > 0 :
@@ -119,10 +119,15 @@ class Player :
             self.roll = roll_bool
             self.stamina -= 30
             self.frame = 1
-            if self.last_dir == 0 or self.last_dir == 1:
+            if self.last_dir == 1:
                 self.line = 1
             elif self.last_dir == -1 :
                 self.line = 0
+            elif self.last_dir == 0 :
+                if self.dir == 1 or self.dir == 0:
+                    self.line = 1
+                elif self.dir == -1 :
+                    self.line = 0
 
     def attack(self) :
         pass
