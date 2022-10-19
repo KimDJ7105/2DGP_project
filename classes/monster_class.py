@@ -1,4 +1,5 @@
 from pico2d import *
+import classes.player_class as cat
 
 class Monster :
     #sprite = load_image('')
@@ -7,6 +8,9 @@ class Monster :
     x = 400
     y = 300
 
+    def get_distance(self, player) :
+        pass
+
     def attack_far(self) :
         pass
 
@@ -14,4 +18,10 @@ class Monster :
         pass
 
     def attack_mid(self) :
+        pass
+
+    def move(self):
+        pass
+
+    def deliver_damage(self,start, end, y, player) :
         pass
