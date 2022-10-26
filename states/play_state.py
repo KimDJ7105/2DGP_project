@@ -35,7 +35,10 @@ def update():
 def draw():
     clear_canvas()
     map.draw_wide()
-    cat.draw()
+    if cat.size == 100 :
+        cat.draw()
+    elif cat.size == 200 :
+        cat.draw_weapon()
     update_canvas()
 
 
@@ -56,6 +59,8 @@ def handle_events():
                 cat.set_roll(True)
             elif event.key == SDLK_m :
                 game_framework.push_state(map_select_state)
+            elif event.key == SDLK_z :
+                cat.set_sword()
         elif event.type == SDL_KEYUP :
             if event.key == SDLK_a or event.key == SDLK_d:
                 cat.set_dir(0)
