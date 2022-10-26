@@ -28,6 +28,16 @@ class Player :
         self.draw_heart()
         self.draw_stamina()
 
+    def draw_weapon(self) :
+        if self.x > 400 and self.x < 1600 : 
+            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400, self.y + 30)
+        elif self.x <= 400 :
+            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, self.x, self.y + 30)
+        elif self.x >= 1600 :
+            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400 + (self.x - 1600), self.y + 30)
+        self.draw_heart()
+        self.draw_stamina()
+
     def draw_heart(self) :
         tem_x = 50
         tem_y = 550
@@ -131,3 +141,11 @@ class Player :
 
     def attack(self) :
         pass
+
+    def set_default(self) :
+        self.sprite = load_image('player/standard.png')
+        self.size = 100
+
+    def set_sword(self) :
+        self.sprite = load_image('player/sword.png')
+        self.size = 200
