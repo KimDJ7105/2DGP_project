@@ -15,6 +15,7 @@ class Player :
         self.line = 5 #sprite line
         self.jump = False
         self.roll = False
+        self.atk_on = False
         self.stamina = 100
         self.size = 100
 
@@ -30,11 +31,11 @@ class Player :
 
     def draw_weapon(self) :
         if self.x > 400 and self.x < 1600 : 
-            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400, self.y + 30)
+            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400, self.y + 50)
         elif self.x <= 400 :
-            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, self.x, self.y + 30)
+            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, self.x, self.y + 50)
         elif self.x >= 1600 :
-            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400 + (self.x - 1600), self.y + 30)
+            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400 + (self.x - 1600), self.y + 50)
         self.draw_heart()
         self.draw_stamina()
 
