@@ -1,5 +1,39 @@
 from pico2d import *
 
+RD, LD, RU, LU, WD, WU, MD, MU, SPACED, SPACEU  = range(10)
+
+key_event_table = {
+    (SDL_KEYDOWN, SDLK_a) : RD,
+    (SDL_KEYDOWN,SDLK_d) : LD,
+    (SDL_KEYUP, SDLK_a) : RU,
+    (SDL_KEYUP, SDLK_d) : LU,
+    (SDL_KEYDOWN,SDLK_w) : WD,
+    (SDL_KEYUP, SDLK_w) : WU,
+    (SDL_KEYDOWN, SDLK_KP_SPACE) : SPACED,
+    (SDL_KEYUP, SDLK_KP_SPACE) : SPACEU
+}
+
+class IDLE :
+    @staticmethod
+    def enter(self, event) :
+        self.dir = 0
+
+    @staticmethod
+    def exit(self) :
+        pass
+
+    @staticmethod
+    def do(self):
+        self.frame = (self.frame + 1) % 4
+
+
+    @staticmethod
+    def draw(self):
+        if self.last_dir == 1:
+            self.image.clip_draw(self.frame * 100, 300, 100, 100, self.x, self.y)
+        else:
+             self.image.clip_draw(self.frame * 100, 200, 100, 100, self.x, self.y)
+
 class Player :
     def __init__(self) :
         self.sprite = load_image('player/standard.png')
@@ -94,8 +128,8 @@ class Player :
     def frame_update(self) :
         if self.line == 2 or self.line == 3 :
             self.frame = (self.frame + 1) % 7
-        elif self.line == 4 or self.line == 5 and self.roll == False:
-            self.frame = (self.frame + 1) % 4
+        # elif self.line == 4 or self.line == 5 and self.roll == False:
+        #     self.frame = (self.frame + 1) % 4
         elif self.roll == True :
             self.frame += 1
             if self.last_dir == 0 or self.last_dir == 1 :
@@ -141,7 +175,16 @@ class Player :
                     self.line = 0
 
     def attack(self) :
-        pass
+        if self.atk_on == False :
+            self.atk_on = True
+            if self.last_dir == 1:
+                self.line = 6
+            elif self.last_dir == -1:
+                self.line = 7
+            self.frame = 0
+        elif self.atk_on == True and self.frame == 2 :
+            self.line = 6
+            self.frame = 3
 
     def set_default(self) :
         self.sprite = load_image('player/standard.png')
