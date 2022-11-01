@@ -21,6 +21,7 @@ class IDLE :
             self.line = 5
         elif self.last_dir == -1 :
             self.line = 4
+        self.frame = 0
 
     @staticmethod
     def exit(self) :
@@ -29,6 +30,16 @@ class IDLE :
     @staticmethod
     def do(self):
         self.frame = (self.frame + 1) % 4
+        if self.y < 90 :
+            self.y = 90
+        elif self.y > 90 :
+            self.y -= 2
+            if self.last_dir == 1:
+                self.line = 1
+                self.frame = 0
+            elif self.last_dir == -1 :
+                self.line = 0
+                self.frame = 0
 
     @staticmethod
     def draw(self):
@@ -49,6 +60,7 @@ class RUN :
         elif event == LU :
             self.dir += 1
             self.line = 3
+        self.frame = 0
 
     @staticmethod
     def exit(self) :
@@ -59,6 +71,16 @@ class RUN :
         self.frame = (self.frame + 1) % 7
         self.x += self.dir * 2
         self.x = clamp(0, self.x, 2000)
+        if self.y < 90 :
+            self.y = 90
+        elif self.y > 90 :
+            self.y -= 2
+            if self.last_dir == 1:
+                self.line = 1
+                self.frame = 0
+            elif self.last_dir == -1 :
+                self.line = 0
+                self.frame = 0
 
     @staticmethod
     def draw(self):
@@ -90,6 +112,35 @@ class ROLL :
                 if self.x > 0 :
                     self.x -= 30
         if self.frame == 4 :
+            self.add_event(IDLE)
+        if self.y < 90 :
+            self.y = 90
+        elif self.y > 90 :
+            self.y -= 2
+
+    @staticmethod
+    def draw(self):
+        self.draw()
+
+class JUMP :
+    @staticmethod
+    def enter(self, event) :
+        self.jump = True
+        if self.last_dir == 1 :
+            self.line = 1
+        elif self.last_dir == -1 :
+            self.line = 0
+        self.frame = 0
+
+    @staticmethod
+    def exit(self) :
+        self.jump = False
+
+    @staticmethod
+    def do(self):
+        if self.y < 160 :
+            self.y += 2
+        elif self.y >= 160 :
             self.add_event(IDLE)
 
     @staticmethod
@@ -159,41 +210,43 @@ class Player :
 
     def move(self) :
         if self.roll == True :
-            if self.frame == 4 :
-                self.roll = False
-                self.set_dir(self.last_dir)
-                self.set_dir(0)
+            # if self.frame == 4 :
+            #     self.roll = False
+            #     self.set_dir(self.last_dir)
+            #     self.set_dir(0)
         elif self.roll == False :
-            if self.jump == False : #not jump or in mid air
-                if self.y < 90 :
-                    self.y = 90
-                elif self.y > 90 :
-                    self.y -= 2
-                    if self.y == 90 :
-                        self.set_dir(self.last_dir)
-                        self.set_dir(0)
-                    else :
-                        if self.last_dir == 1 or self.last_dir == 0 :
-                            self.line = 1
-                            self.frame = 0
-                        elif self.last_dir == -1 :
-                            self.line = 0
-                            self.frame = 0
-            elif self.jump == True : #jumping
-                if self.y < 160 :
-                    self.y += 2
-                    if self.last_dir == 1 or self.last_dir == 0 :
-                        self.line = 1
-                        self.frame = 0
-                    elif self.last_dir == -1 :
-                        self.line = 0
-                        self.frame = 0
-                elif self.y >= 160 :
-                    self.jump = False
-            if self.dir == -1 and self.x > 0 or self.dir == 1 and self.x < 2000: #left or right
-                self.x += 2* self.dir
+            pass
+            # if self.jump == False : #not jump or in mid air
+            #     if self.y < 90 :
+            #         self.y = 90
+            #     elif self.y > 90 :
+            #         self.y -= 2
+                    # if self.y == 90 :
+                    #     self.set_dir(self.last_dir)
+                    #     self.set_dir(0)
+                    # else :
+                    #     if self.last_dir == 1 or self.last_dir == 0 :
+                    #         self.line = 1
+                    #         self.frame = 0
+                    #     elif self.last_dir == -1 :
+                    #         self.line = 0
+                    #         self.frame = 0
+            # elif self.jump == True : #jumping
+            #     if self.y < 160 :
+            #         self.y += 2
+            #         if self.last_dir == 1 or self.last_dir == 0 :
+            #             self.line = 1
+            #             self.frame = 0
+            #         elif self.last_dir == -1 :
+            #             self.line = 0
+            #             self.frame = 0
+            #     elif self.y >= 160 :
+            #         self.jump = False
+            # if self.dir == -1 and self.x > 0 or self.dir == 1 and self.x < 2000: #left or right
+            #     self.x += 2* self.dir
 
     def frame_update(self) :
+        pass
         # if self.line == 2 or self.line == 3 :
         #     self.frame = (self.frame + 1) % 7
         # elif self.line == 4 or self.line == 5 and self.roll == False:
