@@ -17,6 +17,10 @@ class IDLE :
     @staticmethod
     def enter(self, event) :
         self.dir = 0
+        if self.last_dir == 1 :
+            self.line = 5
+        elif self.last_dir == -1 :
+            self.line = 4
 
     @staticmethod
     def exit(self) :
@@ -26,13 +30,46 @@ class IDLE :
     def do(self):
         self.frame = (self.frame + 1) % 4
 
+    @staticmethod
+    def draw(self):
+        self.draw()
+
+class RUN :
+    @staticmethod
+    def enter(self, event) :
+        if event == RD :
+            self.dir += 1 
+            self.line = 3
+        elif event == LD:
+            self.dir -= 1
+            self.line = 2
+        elif event == RU :
+            self.dir -= 1
+            self.line = 2
+        elif event == LU :
+            self.dir += 1
+            self.line = 3
+
+    @staticmethod
+    def exit(self) :
+        self.last_dir = self.dir;
+
+    @staticmethod
+    def do(self):
+        self.frame = (self.frame + 1) % 7
+        self.x += self.dir * 2
+        self.x = clamp(0, self.x, 1600)
 
     @staticmethod
     def draw(self):
-        if self.last_dir == 1:
-            self.image.clip_draw(self.frame * 100, 300, 100, 100, self.x, self.y)
-        else:
-             self.image.clip_draw(self.frame * 100, 200, 100, 100, self.x, self.y)
+        self.draw()
+
+next_state = {
+    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, TIMER :SLEEP, AD: AUTO_RUN},
+    RUN: {RU: IDLE, LU: IDLE, LD: IDLE, RD: IDLE,TIMER : RUN, AD: AUTO_RUN},
+    SLEEP: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, TIMER : SLEEP, AD: AUTO_RUN},
+    AUTO_RUN: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, TIMER: AUTO_RUN, AD: IDLE}
+}
 
 class Player :
     def __init__(self) :
@@ -54,22 +91,20 @@ class Player :
         self.size = 100
 
     def draw(self) :
-        if self.x > 400 and self.x < 1600 : 
-            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400, self.y)
-        elif self.x <= 400 :
-            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, self.x, self.y)
-        elif self.x >= 1600 :
-            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400 + (self.x - 1600), self.y)
-        self.draw_heart()
-        self.draw_stamina()
-
-    def draw_weapon(self) :
-        if self.x > 400 and self.x < 1600 : 
-            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400, self.y + 50)
-        elif self.x <= 400 :
-            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, self.x, self.y + 50)
-        elif self.x >= 1600 :
-            self.sprite.clip_draw(self.frame * self.size, self.line * self.size ,self.size, self.size, 400 + (self.x - 1600), self.y + 50)
+        if self.atk_on == False :
+            if self.x > 400 and self.x < 1600 : 
+                self.sprite.clip_draw(self.frame * 100, self.line * 100 , 100, 100, 400, self.y)
+            elif self.x <= 400 :
+                self.sprite.clip_draw(self.frame * 100, self.line * 100 , 100, 100, self.x, self.y)
+            elif self.x >= 1600 :
+                self.sprite.clip_draw(self.frame * 100, self.line * 100 , 100, 100, 400 + (self.x - 1600), self.y)
+        elif self.atk_on == True :
+            if self.x > 400 and self.x < 1600 : 
+                self.sprite.clip_draw(self.frame * 200, self.line * 200 , 200, 200, 400, self.y + 50)
+            elif self.x <= 400 :
+                self.sprite.clip_draw(self.frame * 200, self.line * 200 , 200, 200, self.x, self.y + 50)
+            elif self.x >= 1600 :
+                self.sprite.clip_draw(self.frame * 200, self.line * 200 , 200, 200, 400 + (self.x - 1600), self.y + 50)
         self.draw_heart()
         self.draw_stamina()
 
@@ -126,8 +161,8 @@ class Player :
                 self.x += 2* self.dir
 
     def frame_update(self) :
-        if self.line == 2 or self.line == 3 :
-            self.frame = (self.frame + 1) % 7
+        # if self.line == 2 or self.line == 3 :
+        #     self.frame = (self.frame + 1) % 7
         # elif self.line == 4 or self.line == 5 and self.roll == False:
         #     self.frame = (self.frame + 1) % 4
         elif self.roll == True :
