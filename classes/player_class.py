@@ -58,7 +58,39 @@ class RUN :
     def do(self):
         self.frame = (self.frame + 1) % 7
         self.x += self.dir * 2
-        self.x = clamp(0, self.x, 1600)
+        self.x = clamp(0, self.x, 2000)
+
+    @staticmethod
+    def draw(self):
+        self.draw()
+
+class ROLL :
+    @staticmethod
+    def enter(self, event) :
+        self.roll = True
+        self.frame = 1
+        self.stamina -= 30
+        if self.last_dir == 1:
+            self.line = 1
+        elif self.last_dir == -1 :
+            self.line = 0
+
+    @staticmethod
+    def exit(self) :
+        self.roll = False;
+        pass
+
+    @staticmethod
+    def do(self):
+        self.frame += 1
+        if self.last_dir == 1 :
+            if self.x < 2000 :
+                self.x += 30
+            elif self.last_dir == -1 :
+                if self.x > 0 :
+                    self.x -= 30
+        if self.frame == 4 :
+            self.add_event(IDLE)
 
     @staticmethod
     def draw(self):
@@ -81,14 +113,15 @@ class Player :
         self.hp = 5
         self.atk = 0
         self.frame = 0
-        self.dir = 0
-        self.last_dir = 0
+        self.dir = 1
+        self.last_dir = 1
         self.line = 5 #sprite line
         self.jump = False
         self.roll = False
         self.atk_on = False
         self.stamina = 100
         self.size = 100
+        self.q = []
 
     def draw(self) :
         if self.atk_on == False :
@@ -165,14 +198,17 @@ class Player :
         #     self.frame = (self.frame + 1) % 7
         # elif self.line == 4 or self.line == 5 and self.roll == False:
         #     self.frame = (self.frame + 1) % 4
-        elif self.roll == True :
-            self.frame += 1
-            if self.last_dir == 0 or self.last_dir == 1 :
-                if self.x < 2000 :
-                    self.x += 30
-            elif self.last_dir == -1 :
-                if self.x > 0 :
-                    self.x -= 30
+        # elif self.roll == True :
+        #     self.frame += 1
+        #     if self.last_dir == 0 or self.last_dir == 1 :
+        #         if self.x < 2000 :
+        #             self.x += 30
+        #     elif self.last_dir == -1 :
+        #         if self.x > 0 :
+        #             self.x -= 30
+
+    def add_event(self, key_event) :
+        self.q.insert(0,key_event)
 
     def set_line(self,num) :
         self.line = num
@@ -195,9 +231,9 @@ class Player :
             self.jump = jump_bool
 
     def set_roll(self, roll_bool) :
-        if self.roll == False and self.stamina > 30:
-            self.roll = roll_bool
-            self.stamina -= 30
+        # if self.roll == False and self.stamina > 30:
+        #     self.roll = roll_bool
+        #     self.stamina -= 30
             self.frame = 1
             if self.last_dir == 1:
                 self.line = 1
