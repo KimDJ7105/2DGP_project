@@ -25,8 +25,8 @@ def exit():
 
 def update():
     global frame_rate
-    frame_rate = (frame_rate + 1) % 21
-    if frame_rate == 20 :
+    frame_rate = (frame_rate + 1) % 26
+    if frame_rate == 25 :
         cat.update()
     map.map_move(cat.x)
     cat.regen_stamina()
