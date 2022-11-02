@@ -1,16 +1,16 @@
 from pico2d import *
 
-RD, LD, RU, LU, WD, WU, MD, MU, SPACED, SPACEU  = range(10)
+RD, LD, RU, LU, WD, WU, MD, MU, SPACED, SPACEU, END  = range(11)
 
 key_event_table = {
-    (SDL_KEYDOWN, SDLK_a) : RD,
-    (SDL_KEYDOWN,SDLK_d) : LD,
-    (SDL_KEYUP, SDLK_a) : RU,
-    (SDL_KEYUP, SDLK_d) : LU,
+    (SDL_KEYDOWN, SDLK_a) : LD,
+    (SDL_KEYDOWN,SDLK_d) : RD,
+    (SDL_KEYUP, SDLK_a) : LU,
+    (SDL_KEYUP, SDLK_d) : RU,
     (SDL_KEYDOWN,SDLK_w) : WD,
     (SDL_KEYUP, SDLK_w) : WU,
-    (SDL_KEYDOWN, SDLK_KP_SPACE) : SPACED,
-    (SDL_KEYUP, SDLK_KP_SPACE) : SPACEU
+    (SDL_KEYDOWN, SDLK_SPACE) : SPACED,
+    (SDL_KEYUP, SDLK_SPACE) : SPACEU
 }
 
 class IDLE :
@@ -40,6 +40,11 @@ class IDLE :
             elif self.last_dir == -1 :
                 self.line = 0
                 self.frame = 0
+        elif self.y == 90:
+            if self.last_dir == 1:
+                self.line = 5
+            elif self.last_dir == -1 :
+                self.ine = 4
 
     @staticmethod
     def draw(self):
@@ -69,7 +74,7 @@ class RUN :
     @staticmethod
     def do(self):
         self.frame = (self.frame + 1) % 7
-        self.x += self.dir * 2
+        self.x += self.dir * 3
         self.x = clamp(0, self.x, 2000)
         if self.y < 90 :
             self.y = 90
@@ -81,6 +86,11 @@ class RUN :
             elif self.last_dir == -1 :
                 self.line = 0
                 self.frame = 0
+        elif self.y == 90 :
+            if self.dir == 1:
+                self.line = 3
+            elif self.dir == -1 :
+                self.line = 2
 
     @staticmethod
     def draw(self):
@@ -108,11 +118,11 @@ class ROLL :
         if self.last_dir == 1 :
             if self.x < 2000 :
                 self.x += 30
-            elif self.last_dir == -1 :
-                if self.x > 0 :
-                    self.x -= 30
+        elif self.last_dir == -1 :
+            if self.x > 0 :
+                self.x -= 30
         if self.frame == 4 :
-            self.add_event(IDLE)
+            self.add_event(END)
         if self.y < 90 :
             self.y = 90
         elif self.y > 90 :
@@ -139,19 +149,19 @@ class JUMP :
     @staticmethod
     def do(self):
         if self.y < 160 :
-            self.y += 2
+            self.y += 4
         elif self.y >= 160 :
-            self.add_event(IDLE)
+            self.add_event(END)
 
     @staticmethod
     def draw(self):
         self.draw()
 
 next_state = {
-    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL},
-    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL},
-    ROLL : {RU: ROLL, LU: ROLL, RD: ROLL, LD: ROLL, WD : ROLL, WU: ROLL, SPACED: ROLL, SPACEU : ROLL},
-    JUMP : {RU: JUMP, LU: JUMP, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL}
+    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL, END : IDLE},
+    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL, END : IDLE},
+    ROLL : {RU: ROLL, LU: ROLL, RD: ROLL, LD: ROLL, WD : ROLL, WU: ROLL, SPACED: ROLL, SPACEU : ROLL, END : IDLE},
+    JUMP : {RU: JUMP, LU: JUMP, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL, END : IDLE}
 }
 
 class Player :
@@ -173,6 +183,7 @@ class Player :
         self.stamina = 100
         self.size = 100
         self.q = []
+        self.cur_state = IDLE
 
     def draw(self) :
         if self.atk_on == False :
@@ -208,14 +219,14 @@ class Player :
         if self.stamina > 100 :
             self.stamina = 100
 
-    def move(self) :
-        if self.roll == True :
-            # if self.frame == 4 :
-            #     self.roll = False
-            #     self.set_dir(self.last_dir)
-            #     self.set_dir(0)
-        elif self.roll == False :
-            pass
+    # def move(self) :
+    #     if self.roll == True :
+    #         # if self.frame == 4 :
+    #         #     self.roll = False
+    #         #     self.set_dir(self.last_dir)
+    #         #     self.set_dir(0)
+    #     elif self.roll == False :
+    #         pass
             # if self.jump == False : #not jump or in mid air
             #     if self.y < 90 :
             #         self.y = 90
@@ -245,8 +256,8 @@ class Player :
             # if self.dir == -1 and self.x > 0 or self.dir == 1 and self.x < 2000: #left or right
             #     self.x += 2* self.dir
 
-    def frame_update(self) :
-        pass
+    # def frame_update(self) :
+    #     pass
         # if self.line == 2 or self.line == 3 :
         #     self.frame = (self.frame + 1) % 7
         # elif self.line == 4 or self.line == 5 and self.roll == False:
@@ -263,40 +274,40 @@ class Player :
     def add_event(self, key_event) :
         self.q.insert(0,key_event)
 
-    def set_line(self,num) :
-        self.line = num
+    # def set_line(self,num) :
+    #     self.line = num
 
-    def set_dir(self, num) :
-        self.last_dir = self.dir
-        self.dir = num
-        if num == 1 :
-            self.set_line(3)
-        elif num == -1 :
-            self.set_line(2)
-        elif num == 0 :
-            if self.last_dir == -1 :
-                self.set_line(4)
-            elif self.last_dir == 1 :
-                self.set_line(5)
+    # def set_dir(self, num) :
+    #     self.last_dir = self.dir
+    #     self.dir = num
+    #     if num == 1 :
+    #         self.set_line(3)
+    #     elif num == -1 :
+    #         self.set_line(2)
+    #     elif num == 0 :
+    #         if self.last_dir == -1 :
+    #             self.set_line(4)
+    #         elif self.last_dir == 1 :
+    #             self.set_line(5)
 
-    def set_jump(self, jump_bool) :
-        if self.roll == False and self.y == 90:
-            self.jump = jump_bool
+    # def set_jump(self, jump_bool) :
+    #     if self.roll == False and self.y == 90:
+    #         self.jump = jump_bool
 
-    def set_roll(self, roll_bool) :
-        # if self.roll == False and self.stamina > 30:
-        #     self.roll = roll_bool
-        #     self.stamina -= 30
-            self.frame = 1
-            if self.last_dir == 1:
-                self.line = 1
-            elif self.last_dir == -1 :
-                self.line = 0
-            elif self.last_dir == 0 :
-                if self.dir == 1 or self.dir == 0:
-                    self.line = 1
-                elif self.dir == -1 :
-                    self.line = 0
+    # def set_roll(self, roll_bool) :
+    #     # if self.roll == False and self.stamina > 30:
+    #     #     self.roll = roll_bool
+    #     #     self.stamina -= 30
+    #         self.frame = 1
+    #         if self.last_dir == 1:
+    #             self.line = 1
+    #         elif self.last_dir == -1 :
+    #             self.line = 0
+    #         elif self.last_dir == 0 :
+    #             if self.dir == 1 or self.dir == 0:
+    #                 self.line = 1
+    #             elif self.dir == -1 :
+    #                 self.line = 0
 
     def attack(self) :
         if self.atk_on == False :
@@ -317,3 +328,24 @@ class Player :
     def set_sword(self) :
         self.sprite = load_image('player/sword.png')
         self.size = 200
+
+    def update(self) :
+        self.cur_state.do(self)
+
+        if self.q :
+            event = self.q.pop()
+            if event != self.cur_state :
+                self.cur_state.exit(self)
+                self.cur_state = next_state[self.cur_state][event]
+                self.cur_state.enter(self, event)
+
+    def handle_event(self, event) :
+        if (event.type , event.key) in key_event_table :
+            key_event = key_event_table[(event.type , event.key)]
+            self.add_event(key_event)
+
+    def add_roll(self) :
+        self.add_event(SPACED)
+
+    def add_jump(self) :
+        self.add_event(WD)
