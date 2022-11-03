@@ -1,6 +1,6 @@
 from pico2d import *
 
-RD, LD, RU, LU, WD, WU, MD, MU, SPACED, SPACEU, END  = range(11)
+RD, LD, RU, LU, WD, WU, MD, SPACE, END  = range(9)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_a) : LD,
@@ -9,8 +9,8 @@ key_event_table = {
     (SDL_KEYUP, SDLK_d) : RU,
     (SDL_KEYDOWN,SDLK_w) : WD,
     (SDL_KEYUP, SDLK_w) : WU,
-    (SDL_KEYDOWN, SDLK_SPACE) : SPACED,
-    (SDL_KEYUP, SDLK_SPACE) : SPACEU
+    (SDL_KEYDOWN, SDLK_SPACE) : SPACE,
+    (SDL_KEYDOWN, SDLK_m) : MD,
 }
 
 class IDLE :
@@ -160,12 +160,16 @@ class JUMP :
 class ATTACK :
     @staticmethod
     def enter(self, event) :
-        self.atking = True
-        if self.last_dir == 1:
-            self.line = 9
-        elif self.last_dir == -1:
-            self.line = 8
-        self.frame = 0
+        if self.stamina >= 20 :
+            self.atking = True
+            if self.last_dir == 1:
+                self.line = 9
+            elif self.last_dir == -1:
+                self.line = 8
+            self.frame = 0
+            self.stamina -= 20
+        else :
+            self.add_event(END)
 
     @staticmethod
     def exit(self) :
@@ -174,13 +178,14 @@ class ATTACK :
 
     @staticmethod
     def do(self):
-        self.frame += 1
-        if self.frame == 6 :
-            self.add_event(END)
-        if self.y < 90 :
-            self.y = 90
-        elif self.y > 90 :
-            self.y -= 7
+        if self.atking == True :
+            self.frame += 1
+            if self.frame == 6 :
+                self.add_event(END)
+            if self.y < 90 :
+                self.y = 90
+            elif self.y > 90 :
+                self.y -= 7
 
     @staticmethod
     def draw(self):
@@ -188,11 +193,11 @@ class ATTACK :
 
 
 next_state = {
-    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL, END : IDLE, MD : ATTACK, MU : ATTACK},
-    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL, END : IDLE, MD : ATTACK, MU : ATTACK},
-    ROLL : {RU: ROLL, LU: ROLL, RD: ROLL, LD: ROLL, WD : ROLL, WU: ROLL, SPACED: ROLL, SPACEU : ROLL, END : IDLE, MD : ROLL, MU : ROLL},
-    JUMP : {RU: JUMP, LU: JUMP, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL, END : IDLE, MD : ATTACK, MU : ATTACK},
-    ATTACK : {RU: ATTACK, LU: ATTACK, RD: ATTACK, LD: ATTACK, WD : ATTACK, WU: ATTACK, SPACED: ROLL, SPACEU : ROLL, END : IDLE, MD : ATTACK, MU : ATTACK},
+    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACE: ROLL, END : IDLE, MD : ATTACK},
+    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, WD : JUMP, WU: JUMP, SPACE: ROLL, END : IDLE, MD : ATTACK,},
+    ROLL : {RU: ROLL, LU: ROLL, RD: ROLL, LD: ROLL, WD : ROLL, WU: ROLL, SPACE: ROLL, END : IDLE, MD : ROLL},
+    JUMP : {RU: JUMP, LU: JUMP, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACE: ROLL, END : IDLE, MD : ATTACK},
+    ATTACK : {RU: ATTACK, LU: ATTACK, RD: ATTACK, LD: ATTACK, WD : ATTACK, WU: ATTACK, SPACE: ROLL, END : IDLE, MD : ATTACK},
 }
 
 class Player :
@@ -288,7 +293,7 @@ class Player :
             self.add_event(key_event)
 
     def add_roll(self) :
-        self.add_event(SPACED)
+        self.add_event(SPACE)
 
     def add_jump(self) :
         self.add_event(WD)
