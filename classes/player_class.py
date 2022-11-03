@@ -126,7 +126,7 @@ class ROLL :
         if self.y < 90 :
             self.y = 90
         elif self.y > 90 :
-            self.y -= 2
+            self.y -= 4
 
     @staticmethod
     def draw(self):
@@ -174,7 +174,13 @@ class ATTACK :
 
     @staticmethod
     def do(self):
-        pass
+        self.frame += 1
+        if self.frame == 6 :
+            self.add_event(END)
+        if self.y < 90 :
+            self.y = 90
+        elif self.y > 90 :
+            self.y -= 7
 
     @staticmethod
     def draw(self):
@@ -182,10 +188,11 @@ class ATTACK :
 
 
 next_state = {
-    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL, END : IDLE},
-    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL, END : IDLE},
-    ROLL : {RU: ROLL, LU: ROLL, RD: ROLL, LD: ROLL, WD : ROLL, WU: ROLL, SPACED: ROLL, SPACEU : ROLL, END : IDLE},
-    JUMP : {RU: JUMP, LU: JUMP, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL, END : IDLE}
+    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL, END : IDLE, MD : ATTACK, MU : ATTACK},
+    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL, END : IDLE, MD : ATTACK, MU : ATTACK},
+    ROLL : {RU: ROLL, LU: ROLL, RD: ROLL, LD: ROLL, WD : ROLL, WU: ROLL, SPACED: ROLL, SPACEU : ROLL, END : IDLE, MD : ROLL, MU : ROLL},
+    JUMP : {RU: JUMP, LU: JUMP, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL, END : IDLE, MD : ATTACK, MU : ATTACK},
+    ATTACK : {RU: ATTACK, LU: ATTACK, RD: ATTACK, LD: ATTACK, WD : ATTACK, WU: ATTACK, SPACED: ROLL, SPACEU : ROLL, END : IDLE, MD : ATTACK, MU : ATTACK},
 }
 
 class Player :
