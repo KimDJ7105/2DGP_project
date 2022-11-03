@@ -33,7 +33,7 @@ class IDLE :
         if self.y < 90 :
             self.y = 90
         elif self.y > 90 :
-            self.y -= 2
+            self.y -= 7
             if self.last_dir == 1:
                 self.line = 1
                 self.frame = 0
@@ -74,12 +74,12 @@ class RUN :
     @staticmethod
     def do(self):
         self.frame = (self.frame + 1) % 7
-        self.x += self.dir * 3
+        self.x += self.dir * 5
         self.x = clamp(0, self.x, 2000)
         if self.y < 90 :
             self.y = 90
         elif self.y > 90 :
-            self.y -= 2
+            self.y -= 7
             if self.last_dir == 1:
                 self.line = 1
                 self.frame = 0
@@ -149,13 +149,37 @@ class JUMP :
     @staticmethod
     def do(self):
         if self.y < 160 :
-            self.y += 4
+            self.y += 7
         elif self.y >= 160 :
             self.add_event(END)
 
     @staticmethod
     def draw(self):
         self.draw()
+
+class ATTACK :
+    @staticmethod
+    def enter(self, event) :
+        self.atking = True
+        if self.last_dir == 1:
+            self.line = 9
+        elif self.last_dir == -1:
+            self.line = 8
+        self.frame = 0
+
+    @staticmethod
+    def exit(self) :
+        self.atking = False
+        pass
+
+    @staticmethod
+    def do(self):
+        pass
+
+    @staticmethod
+    def draw(self):
+        self.draw()
+
 
 next_state = {
     IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACED: ROLL, SPACEU : ROLL, END : IDLE},
@@ -180,8 +204,8 @@ class Player :
         self.jump = False
         self.roll = False
         self.atk_on = False
+        self.atking = False
         self.stamina = 100
-        self.size = 100
         self.q = []
         self.cur_state = IDLE
 
@@ -219,95 +243,8 @@ class Player :
         if self.stamina > 100 :
             self.stamina = 100
 
-    # def move(self) :
-    #     if self.roll == True :
-    #         # if self.frame == 4 :
-    #         #     self.roll = False
-    #         #     self.set_dir(self.last_dir)
-    #         #     self.set_dir(0)
-    #     elif self.roll == False :
-    #         pass
-            # if self.jump == False : #not jump or in mid air
-            #     if self.y < 90 :
-            #         self.y = 90
-            #     elif self.y > 90 :
-            #         self.y -= 2
-                    # if self.y == 90 :
-                    #     self.set_dir(self.last_dir)
-                    #     self.set_dir(0)
-                    # else :
-                    #     if self.last_dir == 1 or self.last_dir == 0 :
-                    #         self.line = 1
-                    #         self.frame = 0
-                    #     elif self.last_dir == -1 :
-                    #         self.line = 0
-                    #         self.frame = 0
-            # elif self.jump == True : #jumping
-            #     if self.y < 160 :
-            #         self.y += 2
-            #         if self.last_dir == 1 or self.last_dir == 0 :
-            #             self.line = 1
-            #             self.frame = 0
-            #         elif self.last_dir == -1 :
-            #             self.line = 0
-            #             self.frame = 0
-            #     elif self.y >= 160 :
-            #         self.jump = False
-            # if self.dir == -1 and self.x > 0 or self.dir == 1 and self.x < 2000: #left or right
-            #     self.x += 2* self.dir
-
-    # def frame_update(self) :
-    #     pass
-        # if self.line == 2 or self.line == 3 :
-        #     self.frame = (self.frame + 1) % 7
-        # elif self.line == 4 or self.line == 5 and self.roll == False:
-        #     self.frame = (self.frame + 1) % 4
-        # elif self.roll == True :
-        #     self.frame += 1
-        #     if self.last_dir == 0 or self.last_dir == 1 :
-        #         if self.x < 2000 :
-        #             self.x += 30
-        #     elif self.last_dir == -1 :
-        #         if self.x > 0 :
-        #             self.x -= 30
-
     def add_event(self, key_event) :
         self.q.insert(0,key_event)
-
-    # def set_line(self,num) :
-    #     self.line = num
-
-    # def set_dir(self, num) :
-    #     self.last_dir = self.dir
-    #     self.dir = num
-    #     if num == 1 :
-    #         self.set_line(3)
-    #     elif num == -1 :
-    #         self.set_line(2)
-    #     elif num == 0 :
-    #         if self.last_dir == -1 :
-    #             self.set_line(4)
-    #         elif self.last_dir == 1 :
-    #             self.set_line(5)
-
-    # def set_jump(self, jump_bool) :
-    #     if self.roll == False and self.y == 90:
-    #         self.jump = jump_bool
-
-    # def set_roll(self, roll_bool) :
-    #     # if self.roll == False and self.stamina > 30:
-    #     #     self.roll = roll_bool
-    #     #     self.stamina -= 30
-    #         self.frame = 1
-    #         if self.last_dir == 1:
-    #             self.line = 1
-    #         elif self.last_dir == -1 :
-    #             self.line = 0
-    #         elif self.last_dir == 0 :
-    #             if self.dir == 1 or self.dir == 0:
-    #                 self.line = 1
-    #             elif self.dir == -1 :
-    #                 self.line = 0
 
     def attack(self) :
         if self.atk_on == False :
@@ -323,11 +260,10 @@ class Player :
 
     def set_default(self) :
         self.sprite = load_image('player/standard.png')
-        self.size = 100
 
     def set_sword(self) :
         self.sprite = load_image('player/sword.png')
-        self.size = 200
+        self.atk_on = True
 
     def update(self) :
         self.cur_state.do(self)
