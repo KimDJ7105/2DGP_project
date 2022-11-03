@@ -45,7 +45,7 @@ def handle_events():
             if event.key == SDLK_s :
                 if cat.x > 1860 and cat.x < 2000 :
                     game_framework.push_state(map_select_state)
-            elif event.key == SDLK_z :
+            elif event.key == SDLK_z and event.type == SDL_KEYDOWN:
                 cat.set_sword()
             elif event.key == SDLK_w :
                 if cat.y == 90 :
