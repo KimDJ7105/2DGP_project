@@ -6,6 +6,7 @@ import states.map_select_state as map_select_state
 
 map = None
 cat = None
+boss = None
 frame_rate = None
 
 def enter() :
@@ -27,7 +28,7 @@ def update():
     global frame_rate
     frame_rate = (frame_rate + 1) % 26
     if frame_rate == 25 :
-        cat.update()
+        cat.update(boss)
     map.map_move(cat.x)
     cat.regen_stamina()
 
@@ -53,6 +54,8 @@ def handle_events():
             elif event.key == SDLK_SPACE:
                 if cat.stamina > 30 and cat.roll == False:
                     cat.add_roll()
+            elif event.key == SDLK_h :
+                cat.get_damage(0)
             else :
                 cat.handle_event(event)
         elif event.type == SDL_QUIT :
