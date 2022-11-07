@@ -2,11 +2,12 @@ from pico2d import *
 import classes.player_class as cat
 
 class Monster :
-    #sprite = load_image('')
-    hp = 100
-    atk_count = 0
-    x = 400
-    y = 300
+    def __init__ (self) :
+        self.sprite = load_image('')
+        self.hp = 100
+        self.atk_count = 0
+        self.x = 400
+        self.y = 300
 
     def get_distance(self, player) :
         pass
@@ -24,4 +25,8 @@ class Monster :
         pass
 
     def deliver_damage(self,start, end, y, player) :
-        pass
+        if player.x >= start and player.x <= end and player.y <= y :
+            player.get_damage()
+
+    def get_damage(self, damage):
+        self.hp -= damage
