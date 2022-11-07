@@ -55,7 +55,7 @@ def handle_events():
                 if cat.stamina > 30 and cat.roll == False:
                     cat.add_roll()
             elif event.key == SDLK_h :
-                cat.get_damage(0)
+                cat.get_damage(1)
             else :
                 cat.handle_event(event)
         elif event.type == SDL_QUIT :
