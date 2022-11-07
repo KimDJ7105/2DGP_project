@@ -1,8 +1,10 @@
 from pico2d import *
 
-RD, LD, RU, LU, WD, WU, MD, SPACE, END  = range(9)
+RD, LD, RU, LU, WD, WU, MD, SPACE, END, ATKED, QD, QU  = range(12)
 
 key_event_table = {
+    (SDL_KEYDOWN, SDLK_q) : QD,
+    (SDL_KEYUP, SDLK_q) : QU,
     (SDL_KEYDOWN, SDLK_a) : LD,
     (SDL_KEYDOWN,SDLK_d) : RD,
     (SDL_KEYUP, SDLK_a) : LU,
@@ -24,7 +26,7 @@ class IDLE :
         self.frame = 0
 
     @staticmethod
-    def exit(self) :
+    def exit(self, boss) :
         pass
 
     @staticmethod
@@ -68,7 +70,7 @@ class RUN :
         self.frame = 0
 
     @staticmethod
-    def exit(self) :
+    def exit(self, boss) :
         self.last_dir = self.dir;
 
     @staticmethod
@@ -108,7 +110,7 @@ class ROLL :
             self.line = 0
 
     @staticmethod
-    def exit(self) :
+    def exit(self, boss) :
         self.roll = False;
         pass
 
@@ -143,7 +145,7 @@ class JUMP :
         self.frame = 0
 
     @staticmethod
-    def exit(self) :
+    def exit(self, boss) :
         self.jump = False
 
     @staticmethod
@@ -172,7 +174,8 @@ class ATTACK :
             self.add_event(END)
 
     @staticmethod
-    def exit(self) :
+    def exit(self, boss) :
+        #self.deal_damage(self.x, self.x + 10, boss, 10)
         self.atking = False
         pass
 
@@ -191,13 +194,115 @@ class ATTACK :
     def draw(self):
         self.draw()
 
+class HIT :
+    timer = 0
+
+    @staticmethod
+    def enter(self, event) :
+        HIT.timer = 0
+        if self.last_dir == 1 :
+            self.frame = 0
+            self.line = 11
+        elif self.last_dir == -1 :
+            self.frame = 0
+            self.line = 10
+        self.atked = True
+        pass
+
+    @staticmethod
+    def exit(self,boss) :
+        self.atked = False
+        pass
+
+    @staticmethod
+    def do(self):
+        if self.frame == 0 :
+            self.frame = 1
+        elif self.frame == 1 :
+            self.frame = 0
+        HIT.timer += 1
+        if HIT.timer == 15 :
+            self.add_event(END)
+
+    @staticmethod
+    def draw(self):
+        self.draw()
+
+charge = None
+
+class SP_1 :
+    @staticmethod
+    def enter(self, event) :
+        global charge
+        charge = 0
+        if self.last_dir == 1 :
+            self.frame = 0
+            self.line = 7
+        elif self.last_dir == -1 :
+            self.frame = 0
+            self.line = 6
+        pass
+
+    @staticmethod
+    def exit(self,boss) :
+        pass
+
+    @staticmethod
+    def do(self):
+        if self.frame < 3 :
+            self.frame += 1
+        if self.stamina >= 5 :
+            global charge
+            charge += 3
+            self.stamina -= 5
+            pass
+        else :
+            self.add_event(END)
+        pass
+
+    @staticmethod
+    def draw(self):
+        self.draw()
+
+class SP_2 :
+    @staticmethod
+    def enter(self, event) :
+        if self.last_dir == 1 :
+            self.frame = 4
+            self.line = 7
+        elif self.last_dir == -1 :
+            self.frame = 4
+            self.line = 6
+        pass
+
+    @staticmethod
+    def exit(self, boss) :
+        #self.deal_damage(self.x, self.x + 10, boss, charge)
+        #after boss
+        pass
+
+    @staticmethod
+    def do(self):
+        if self.frame < 8 :
+            self.frame += 1
+        elif self.frame == 8 :
+            self.add_event(END)
+        pass
+
+    @staticmethod
+    def draw(self):
+        self.draw()
+
 
 next_state = {
-    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACE: ROLL, END : IDLE, MD : ATTACK},
-    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, WD : JUMP, WU: JUMP, SPACE: ROLL, END : IDLE, MD : ATTACK,},
-    ROLL : {RU: ROLL, LU: ROLL, RD: ROLL, LD: ROLL, WD : ROLL, WU: ROLL, SPACE: ROLL, END : IDLE, MD : ROLL},
-    JUMP : {RU: JUMP, LU: JUMP, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACE: ROLL, END : IDLE, MD : ATTACK},
-    ATTACK : {RU: ATTACK, LU: ATTACK, RD: ATTACK, LD: ATTACK, WD : ATTACK, WU: ATTACK, SPACE: ROLL, END : IDLE, MD : ATTACK},
+    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACE: ROLL, END : IDLE, MD : ATTACK, ATKED : HIT, QD : SP_1, QU : IDLE},
+    RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, WD : JUMP, WU: JUMP, SPACE: ROLL, END : IDLE, MD : ATTACK,ATKED : HIT, QD : SP_1, QU : RUN},
+    ROLL : {RU: ROLL, LU: ROLL, RD: ROLL, LD: ROLL, WD : ROLL, WU: ROLL, SPACE: ROLL, END : IDLE, MD : ROLL, ATKED : ROLL, QD : ROLL, QU : ROLL},
+    JUMP : {RU: JUMP, LU: JUMP, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACE: ROLL, END : IDLE, MD : ATTACK, ATKED : HIT, QD : SP_1, QU : JUMP},
+    ATTACK : {RU: ATTACK, LU: ATTACK, RD: ATTACK, LD: ATTACK, WD : ATTACK, WU: ATTACK, SPACE: ROLL, END : IDLE, MD : ATTACK, ATKED : HIT, QD : ATTACK, QU : ATTACK},
+    HIT : {RU: HIT, LU: HIT, RD: HIT, LD: HIT, WD : HIT, WU: HIT, SPACE: ROLL, END : IDLE, MD : HIT, ATKED : HIT, QD : HIT, QU : HIT},
+    SP_1 : {RU: SP_1, LU: SP_1, RD: SP_1, LD: SP_1, WD : SP_1, WU: SP_1, SPACE: ROLL, END : SP_2, MD : SP_1, ATKED : HIT, QD : SP_1, QU : SP_2},
+    SP_2 : {RU: SP_2, LU: SP_2, RD: SP_2, LD: SP_2, WD : SP_2, WU: SP_2, SPACE: ROLL, END : IDLE, MD : SP_2, ATKED : HIT, QD : SP_2, QU : SP_2},
 }
 
 class Player :
@@ -213,15 +318,16 @@ class Player :
         self.dir = 1
         self.last_dir = 1
         self.line = 5 #sprite line
-        self.jump = False
-        self.roll = False
-        self.atk_on = False
         self.item_level = {'SWORD' : 1,}
         self.item = None
-        self.atking = False
         self.stamina = 100
         self.q = []
         self.cur_state = IDLE
+        self.jump = False
+        self.roll = False
+        self.atk_on = False
+        self.atking = False
+        self.atked = False
 
     def draw(self) :
         if self.atk_on == False :
@@ -260,17 +366,17 @@ class Player :
     def add_event(self, key_event) :
         self.q.insert(0,key_event)
 
-    def attack(self) :
-        if self.atk_on == False :
-            self.atk_on = True
-            if self.last_dir == 1:
-                self.line = 6
-            elif self.last_dir == -1:
-                self.line = 7
-            self.frame = 0
-        elif self.atk_on == True and self.frame == 2 :
-            self.line = 6
-            self.frame = 3
+    # def attack(self) :
+    #     if self.atk_on == False :
+    #         self.atk_on = True
+    #         if self.last_dir == 1:
+    #             self.line = 6
+    #         elif self.last_dir == -1:
+    #             self.line = 7
+    #         self.frame = 0
+    #     elif self.atk_on == True and self.frame == 2 :
+    #         self.line = 6
+    #         self.frame = 3
 
     def set_default(self) :
         self.sprite = load_image('player/standard.png')
@@ -288,13 +394,13 @@ class Player :
                 self.sprite = load_image('player/sword3.png')
                 self.item_level['SWORD'] = 3
 
-    def update(self) :
+    def update(self, boss) :
         self.cur_state.do(self)
 
         if self.q :
             event = self.q.pop()
             if event != self.cur_state :
-                self.cur_state.exit(self)
+                self.cur_state.exit(self, boss)
                 self.cur_state = next_state[self.cur_state][event]
                 self.cur_state.enter(self, event)
 
@@ -308,3 +414,12 @@ class Player :
 
     def add_jump(self) :
         self.add_event(WD)
+
+    def get_damage(self, damage) :
+        if self.roll == False and self.atked == False :
+            self.hp -= damage
+            self.add_event(ATKED)
+
+    def deal_damage(self, start, end, boss, damage) :
+        if boss.x >= start and boss.x <= end :
+            boss.get_damage(damage)
