@@ -1,19 +1,6 @@
 from pico2d import *
-
-RD, LD, RU, LU, WD, WU, MD, SPACE, END, ATKED, QD, QU  = range(12)
-
-key_event_table = {
-    (SDL_KEYDOWN, SDLK_q) : QD,
-    (SDL_KEYUP, SDLK_q) : QU,
-    (SDL_KEYDOWN, SDLK_a) : LD,
-    (SDL_KEYDOWN,SDLK_d) : RD,
-    (SDL_KEYUP, SDLK_a) : LU,
-    (SDL_KEYUP, SDLK_d) : RU,
-    (SDL_KEYDOWN,SDLK_w) : WD,
-    (SDL_KEYUP, SDLK_w) : WU,
-    (SDL_KEYDOWN, SDLK_SPACE) : SPACE,
-    (SDL_KEYDOWN, SDLK_j) : MD,
-}
+import game_framework
+from player.player_parameter import *
 
 class IDLE :
     @staticmethod
@@ -31,11 +18,11 @@ class IDLE :
 
     @staticmethod
     def do(self):
-        self.frame = (self.frame + 1) % 4
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME* game_framework.frame_time) % 4
         if self.y < 90 :
             self.y = 90
         elif self.y > 90 :
-            self.y -= 7
+            self.y -= JUMP_SPEED_PPS * game_framework.frame_time
             if self.last_dir == 1:
                 self.line = 1
                 self.frame = 0
@@ -75,13 +62,13 @@ class RUN :
 
     @staticmethod
     def do(self):
-        self.frame = (self.frame + 1) % 7
-        self.x += self.dir * 5
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME* game_framework.frame_time) % 7
+        self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
         self.x = clamp(0, self.x, 2000)
         if self.y < 90 :
             self.y = 90
         elif self.y > 90 :
-            self.y -= 7
+            self.y -= JUMP_SPEED_PPS * game_framework.frame_time
             if self.last_dir == 1:
                 self.line = 1
                 self.frame = 0
@@ -116,14 +103,15 @@ class ROLL :
 
     @staticmethod
     def do(self):
-        self.frame += 1
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME* game_framework.frame_time)
         if self.last_dir == 1 :
             if self.x < 2000 :
-                self.x += 30
+                self.x += self.last_dir * ROLL_SPEED_PPS * game_framework.frame_time
         elif self.last_dir == -1 :
             if self.x > 0 :
-                self.x -= 30
-        if self.frame == 4 :
+                self.x += self.last_dir * ROLL_SPEED_PPS * game_framework.frame_time
+                #30
+        if int(self.frame) == 4 :
             self.add_event(END)
         if self.y < 90 :
             self.y = 90
@@ -151,7 +139,7 @@ class JUMP :
     @staticmethod
     def do(self):
         if self.y < 160 :
-            self.y += 7
+            self.y += JUMP_SPEED_PPS * game_framework.frame_time
         elif self.y >= 160 :
             self.add_event(END)
 
@@ -182,13 +170,13 @@ class ATTACK :
     @staticmethod
     def do(self):
         if self.atking == True :
-            self.frame += 1
-            if self.frame == 6 :
+            self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME* game_framework.frame_time)
+            if int(self.frame) == 6 :
                 self.add_event(END)
             if self.y < 90 :
                 self.y = 90
             elif self.y > 90 :
-                self.y -= 7
+                self.y -= JUMP_SPEED_PPS * game_framework.frame_time
 
     @staticmethod
     def draw(self):
@@ -216,9 +204,9 @@ class HIT :
 
     @staticmethod
     def do(self):
-        if self.frame == 0 :
+        if int(self.frame) == 0 :
             self.frame = 1
-        elif self.frame == 1 :
+        elif int(self.frame) == 1 :
             self.frame = 0
         HIT.timer += 1
         if HIT.timer == 15 :
@@ -241,24 +229,26 @@ class SP_1 :
         elif self.last_dir == -1 :
             self.frame = 0
             self.line = 6
+        self.atking = True
         pass
 
     @staticmethod
     def exit(self,boss) :
+        self.atking = False
         pass
 
     @staticmethod
     def do(self):
         if self.y > 90 :
-            self.y -= 7
+            self.y -= JUMP_SPEED_PPS * game_framework.frame_time
         elif self.y < 90 :
             self.y = 90
-        if self.frame < 3 :
-            self.frame += 1
+        if int(self.frame) < 3 :
+            self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME* game_framework.frame_time)
         if self.stamina >= 5 :
             global charge
             charge += 3
-            self.stamina -= 5
+            self.stamina -= FRAME_PER_REGEN * REGEN_PER_TIME* game_framework.frame_time
             pass
         else :
             self.add_event(END)
@@ -277,10 +267,12 @@ class SP_2 :
         elif self.last_dir == -1 :
             self.frame = 4
             self.line = 6
+        self.atking = True
         pass
 
     @staticmethod
     def exit(self, boss) :
+        self.atking = False
         #self.deal_damage(self.x, self.x + 10, boss, charge)
         #after boss
         pass
@@ -288,12 +280,12 @@ class SP_2 :
     @staticmethod
     def do(self):
         if self.y > 90 :
-            self.y -= 7
+            self.y -= JUMP_SPEED_PPS * game_framework.frame_time
         elif self.y < 90 :
             self.y = 90
-        if self.frame < 8 :
-            self.frame += 1
-        elif self.frame == 8 :
+        if int(self.frame) < 8 :
+            self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME* game_framework.frame_time)
+        elif int(self.frame) == 8 :
             self.add_event(END)
         pass
 
@@ -303,7 +295,7 @@ class SP_2 :
 
 
 next_state = {
-    IDLE: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACE: ROLL, END : IDLE, MD : ATTACK, ATKED : HIT, QD : SP_1, QU : IDLE},
+    IDLE: {RU: IDLE, LU: IDLE, RD: RUN, LD: RUN, WD : JUMP, WU: IDLE, SPACE: ROLL, END : IDLE, MD : ATTACK, ATKED : HIT, QD : SP_1, QU : IDLE},
     RUN: {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, WD : JUMP, WU: JUMP, SPACE: ROLL, END : IDLE, MD : ATTACK,ATKED : HIT, QD : SP_1, QU : RUN},
     ROLL : {RU: ROLL, LU: ROLL, RD: ROLL, LD: ROLL, WD : ROLL, WU: ROLL, SPACE: ROLL, END : IDLE, MD : ROLL, ATKED : ROLL, QD : ROLL, QU : ROLL},
     JUMP : {RU: JUMP, LU: JUMP, RD: RUN, LD: RUN, WD : JUMP, WU: JUMP, SPACE: ROLL, END : IDLE, MD : ATTACK, ATKED : HIT, QD : SP_1, QU : JUMP},
@@ -340,18 +332,18 @@ class Player :
     def draw(self) :
         if self.atk_on == False :
             if self.x > 400 and self.x < 1600 : 
-                self.sprite.clip_draw(self.frame * 100, self.line * 100 , 100, 100, 400, self.y)
+                self.sprite.clip_draw(int(self.frame) * 100, self.line * 100 , 100, 100, 400, self.y)
             elif self.x <= 400 :
-                self.sprite.clip_draw(self.frame * 100, self.line * 100 , 100, 100, self.x, self.y)
+                self.sprite.clip_draw(int(self.frame) * 100, self.line * 100 , 100, 100, self.x, self.y)
             elif self.x >= 1600 :
-                self.sprite.clip_draw(self.frame * 100, self.line * 100 , 100, 100, 400 + (self.x - 1600), self.y)
+                self.sprite.clip_draw(int(self.frame) * 100, self.line * 100 , 100, 100, 400 + (self.x - 1600), self.y)
         elif self.atk_on == True :
             if self.x > 400 and self.x < 1600 : 
-                self.sprite.clip_draw(self.frame * 200, self.line * 200 , 200, 200, 400, self.y + 50)
+                self.sprite.clip_draw(int(self.frame) * 200, self.line * 200 , 200, 200, 400, self.y + 50)
             elif self.x <= 400 :
-                self.sprite.clip_draw(self.frame * 200, self.line * 200 , 200, 200, self.x, self.y + 50)
+                self.sprite.clip_draw(int(self.frame) * 200, self.line * 200 , 200, 200, self.x, self.y + 50)
             elif self.x >= 1600 :
-                self.sprite.clip_draw(self.frame * 200, self.line * 200 , 200, 200, 400 + (self.x - 1600), self.y + 50)
+                self.sprite.clip_draw(int(self.frame) * 200, self.line * 200 , 200, 200, 400 + (self.x - 1600), self.y + 50)
         self.draw_heart()
         self.draw_stamina()
 
@@ -366,25 +358,13 @@ class Player :
         self.stamina_bar.draw(400,550,self.stamina,25)
 
     def regen_stamina(self) :
-        if self.stamina < 100 :
-            self.stamina += 0.1
+        if self.stamina < 100 and self.atking == False:
+            self.stamina += FRAME_PER_REGEN * REGEN_PER_TIME* game_framework.frame_time
         if self.stamina > 100 :
             self.stamina = 100
 
     def add_event(self, key_event) :
         self.q.insert(0,key_event)
-
-    # def attack(self) :
-    #     if self.atk_on == False :
-    #         self.atk_on = True
-    #         if self.last_dir == 1:
-    #             self.line = 6
-    #         elif self.last_dir == -1:
-    #             self.line = 7
-    #         self.frame = 0
-    #     elif self.atk_on == True and self.frame == 2 :
-    #         self.line = 6
-    #         self.frame = 3
 
     def set_default(self) :
         self.sprite = load_image('player/standard.png')
@@ -407,7 +387,7 @@ class Player :
 
         if self.q :
             event = self.q.pop()
-            if event != self.cur_state :
+            if next_state[self.cur_state][event] != self.cur_state :
                 self.cur_state.exit(self, boss)
                 self.cur_state = next_state[self.cur_state][event]
                 self.cur_state.enter(self, event)
