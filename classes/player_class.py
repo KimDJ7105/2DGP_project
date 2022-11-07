@@ -12,7 +12,7 @@ key_event_table = {
     (SDL_KEYDOWN,SDLK_w) : WD,
     (SDL_KEYUP, SDLK_w) : WU,
     (SDL_KEYDOWN, SDLK_SPACE) : SPACE,
-    (SDL_KEYDOWN, SDLK_m) : MD,
+    (SDL_KEYDOWN, SDLK_j) : MD,
 }
 
 class IDLE :
@@ -46,7 +46,7 @@ class IDLE :
             if self.last_dir == 1:
                 self.line = 5
             elif self.last_dir == -1 :
-                self.ine = 4
+                self.line = 4
 
     @staticmethod
     def draw(self):
@@ -249,6 +249,10 @@ class SP_1 :
 
     @staticmethod
     def do(self):
+        if self.y > 90 :
+            self.y -= 7
+        elif self.y < 90 :
+            self.y = 90
         if self.frame < 3 :
             self.frame += 1
         if self.stamina >= 5 :
@@ -283,6 +287,10 @@ class SP_2 :
 
     @staticmethod
     def do(self):
+        if self.y > 90 :
+            self.y -= 7
+        elif self.y < 90 :
+            self.y = 90
         if self.frame < 8 :
             self.frame += 1
         elif self.frame == 8 :
