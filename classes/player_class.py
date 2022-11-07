@@ -216,6 +216,8 @@ class Player :
         self.jump = False
         self.roll = False
         self.atk_on = False
+        self.item_level = {'SWORD' : 1,}
+        self.item = None
         self.atking = False
         self.stamina = 100
         self.q = []
@@ -274,8 +276,17 @@ class Player :
         self.sprite = load_image('player/standard.png')
 
     def set_sword(self) :
-        self.sprite = load_image('player/sword.png')
-        self.atk_on = True
+        if self.atk_on == False :
+            self.sprite = load_image('player/sword.png')
+            self.atk_on = True
+            self.item = 'SWORD'
+        elif self.atk_on == True:
+            if self.item_level['SWORD'] == 1:
+                self.sprite = load_image('player/sword2.png')
+                self.item_level['SWORD'] = 2
+            elif self.item_level['SWORD'] == 2:
+                self.sprite = load_image('player/sword3.png')
+                self.item_level['SWORD'] = 3
 
     def update(self) :
         self.cur_state.do(self)
