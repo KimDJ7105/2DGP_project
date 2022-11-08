@@ -7,13 +7,10 @@ import states.map_select_state as map_select_state
 map = None
 cat = None
 boss = None
-frame_rate = None
 
 def enter() :
     global map
     global cat
-    global frame_rate
-    frame_rate = 0
     map = map_class.Map()
     map.set_map_type(0)
     map.set_image()
@@ -25,17 +22,16 @@ def exit():
     del cat
 
 def update():
-    global frame_rate
-    frame_rate = (frame_rate + 1) % 26
-    if frame_rate == 25 :
-        cat.update(boss)
-    map.map_move(cat.x)
+    cat.update(boss)
+    map.map_move(int(cat.x))
     cat.regen_stamina()
 
 def draw():
     clear_canvas()
     map.draw_wide()
     cat.cur_state.draw(cat)
+    if boss != None :
+        boss.draw(int(cat.x))
     update_canvas()
 
 
