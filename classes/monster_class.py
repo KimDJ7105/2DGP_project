@@ -7,7 +7,7 @@ class Monster :
         self.hp = 100
         self.atk_count = 0
         self.x = 1400
-        self.y = 300
+        self.y = 120
 
     def get_distance(self, player) :
         pass
@@ -32,6 +32,9 @@ class Monster :
         self.hp -= damage
 
     def draw(self, x) :
-        #if self.x > x - 400 and self.x < x + 400 :
-        self.sprite.draw(400, 300)
+        if self.x > x - 400 and self.x < x + 400 :
+            if self.x > x :
+                self.sprite.draw(400 - (x - self.x), self.y)
+            elif self.x <= x :
+                self.sprite.draw(400 + (self.x -x), self.y)
         pass
