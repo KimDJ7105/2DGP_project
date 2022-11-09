@@ -31,7 +31,7 @@ def draw():
     map.draw_wide()
     cat.cur_state.draw(cat)
     if boss != None :
-        boss.draw(int(cat.x))
+        boss.draw(map.map_x)
     update_canvas()
 
 
@@ -40,8 +40,8 @@ def handle_events():
     for event in events :
         if event.type == SDL_KEYDOWN or event.type == SDL_KEYUP:
             if event.key == SDLK_s :
-                if cat.x > 1860 and cat.x < 2000 :
-                    game_framework.push_state(map_select_state)
+                # if cat.x > 1860 and cat.x < 2000 :
+                game_framework.push_state(map_select_state)
             elif event.key == SDLK_z and event.type == SDL_KEYDOWN:
                 cat.set_sword()
             elif event.key == SDLK_w :
@@ -50,7 +50,7 @@ def handle_events():
             elif event.key == SDLK_SPACE:
                 if cat.stamina > 30 and cat.roll == False:
                     cat.add_roll()
-            elif event.key == SDLK_h :
+            elif event.type == SDL_KEYDOWN and event.key == SDLK_h :
                 cat.get_damage(1)
             else :
                 cat.handle_event(event)
