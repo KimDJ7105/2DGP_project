@@ -26,7 +26,7 @@ class Map :
             self.map_x = 0
         elif x >= 400 and x < 1600 :
             self.map_x = x
-        elif x>= 1600 :
+        elif x >= 1600 :
             self.map_x = 1600
 
     def set_map_type(self,num) :

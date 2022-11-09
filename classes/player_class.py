@@ -182,7 +182,7 @@ class ATTACK :
     def draw(self):
         self.draw()
 
-class HIT :
+class HIT : #time parameter needed
     timer = 0
 
     @staticmethod
