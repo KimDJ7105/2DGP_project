@@ -3,6 +3,7 @@ import game_framework
 import classes.map_class as map_class
 import classes.player_class as player_class
 import states.map_select_state as map_select_state
+import states.game_over_state as game_over_state
 
 map = None
 cat = None
@@ -25,6 +26,9 @@ def update():
     cat.update(boss)
     map.map_move(int(cat.x))
     cat.regen_stamina()
+    if cat.hp <= 0 : #if player is dead
+        game_framework.push_state(game_over_state)
+        pass
 
 def draw():
     clear_canvas()
