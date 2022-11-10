@@ -8,6 +8,8 @@ class Monster :
         self.atk_count = 0
         self.x = 1400
         self.y = 120
+        self.wide = 482
+        self.hight = 146
 
     def get_distance(self, player) :
         pass
@@ -34,7 +36,7 @@ class Monster :
     def draw(self, x) :
         if self.x > x - 641 and self.x < x + 641 :
             if self.x > x :
-                self.sprite.clip_composite_draw(0,0,482,146,0,'',400 - (x - self.x), self.y)
+                self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'',400 - (x - self.x), self.y)
             elif self.x <= x :
-                self.sprite.clip_composite_draw(0,0,482,146,0,'h',400 + (self.x -x), self.y)
+                self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'h',400 + (self.x -x), self.y)
         pass
