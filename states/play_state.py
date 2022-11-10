@@ -19,6 +19,7 @@ def enter() :
 
 def exit():
     global map, cat
+    global map, cat, boss
     del map
     del cat
     if boss != None :
@@ -35,9 +36,9 @@ def update():
 def draw():
     clear_canvas()
     map.draw_wide()
-    cat.cur_state.draw(cat)
     if boss != None :
         boss.draw(map.map_x)
+    cat.cur_state.draw(cat)
     update_canvas()
 
 
