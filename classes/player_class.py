@@ -207,13 +207,18 @@ class HIT : #time parameter needed
 
     @staticmethod
     def do(self):
+        HIT.timer += FRAME_PER_HIT * HIT_PER_TIME* game_framework.frame_time
+        # if int(HIT.timer) % 2 == 0 :
         if int(self.frame) == 0 :
             self.frame = 1
         elif int(self.frame) == 1 :
             self.frame = 0
-        HIT.timer += 1
-        if HIT.timer == 15 :
+        if int(HIT.timer) == 5 :
             self.add_event(END)
+        if self.y < 90 :
+            self.y = 90
+        elif self.y > 90 :
+            self.y -= 4
 
     @staticmethod
     def draw(self):
