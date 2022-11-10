@@ -4,7 +4,7 @@ import classes.player_class as cat
 class Monster :
     def __init__ (self) :
         self.sprite = load_image('boss/temp.png')
-        self.hp = 10000
+        self.hp = 100
         self.atk_count = 0
         self.x = 1400
         self.y = 120
@@ -32,7 +32,7 @@ class Monster :
 
     def get_damage(self, damage):
         self.hp -= damage
-        print(f'get {damage} damage')
+        print(f'get {damage} damage, remain HP {self.hp}')
 
     def draw(self, x) :
         if self.x > x - 641 and self.x < x + 641 :
