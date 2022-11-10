@@ -21,12 +21,14 @@ def exit():
     global map, cat
     del map
     del cat
+    if boss != None :
+        del boss
 
 def update():
     cat.update(boss)
     map.map_move(int(cat.x))
     cat.regen_stamina()
-    if cat.hp <= 0 : #if player is dead
+    if cat.hp <= 0 or boss!= None and boss.hp <= 0: #if player is dead
         game_framework.push_state(game_over_state)
         pass
 
