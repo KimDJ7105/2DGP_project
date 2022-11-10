@@ -163,7 +163,10 @@ class ATTACK :
 
     @staticmethod
     def exit(self, boss) :
-        #self.deal_damage(self.x, self.x + 10, boss, 10)
+        if self.last_dir == 1 :
+            self.deal_damage(self.x, self.x + 40, boss, self.atk)
+        elif self.last_dir == -1 :
+            self.deal_damage(self.x - 40, self.x, boss, self.atk)
         self.atking = False
         pass
 
@@ -273,7 +276,10 @@ class SP_2 :
     @staticmethod
     def exit(self, boss) :
         self.atking = False
-        #self.deal_damage(self.x, self.x + 10, boss, charge)
+        if self.last_dir == 1 :
+            self.deal_damage(self.x, self.x + 40, boss, charge // 10)
+        elif self.last_dir == -1 :
+            self.deal_damage(self.x - 40, self.x, boss, charge // 10)
         #after boss
         pass
 
@@ -373,13 +379,16 @@ class Player :
         if self.atk_on == False :
             self.sprite = load_image('player/sword.png')
             self.atk_on = True
+            self.atk = 10
             self.item = 'SWORD'
         elif self.atk_on == True:
             if self.item_level['SWORD'] == 1:
                 self.sprite = load_image('player/sword2.png')
+                self.atk = 25
                 self.item_level['SWORD'] = 2
             elif self.item_level['SWORD'] == 2:
                 self.sprite = load_image('player/sword3.png')
+                self.atk = 45
                 self.item_level['SWORD'] = 3
 
     def update(self, boss) :
@@ -409,5 +418,5 @@ class Player :
             self.add_event(ATKED)
 
     def deal_damage(self, start, end, boss, damage) :
-        if boss.x >= start and boss.x <= end :
+        if boss.x - (boss.wide / 2) <= start and boss.x + (boss.wide / 2) >= end:
             boss.get_damage(damage)
