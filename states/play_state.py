@@ -18,7 +18,6 @@ def enter() :
     cat = player_class.Player()
 
 def exit():
-    global map, cat
     global map, cat, boss
     del map
     del cat
@@ -29,9 +28,11 @@ def update():
     cat.update(boss)
     map.map_move(int(cat.x))
     cat.regen_stamina()
-    if cat.hp <= 0 or boss!= None and boss.hp <= 0: #if player is dead
+    if cat.hp <= 0 : #if player is dead
         game_framework.push_state(game_over_state)
-        pass
+    elif boss!= None and boss.hp <= 0 :
+        game_framework.push_state(game_over_state)
+
 
 def draw():
     clear_canvas()
