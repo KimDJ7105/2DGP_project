@@ -32,6 +32,7 @@ class Monster :
 
     def get_damage(self, damage):
         self.hp -= damage
+        print(f'get {damage} damage')
 
     def draw(self, x) :
         if self.x > x - 641 and self.x < x + 641 :
