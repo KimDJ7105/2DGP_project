@@ -1,6 +1,62 @@
 from pico2d import *
 import classes.player_class as cat
 
+ID, RU, AT = range(3)
+
+class mIDLE :
+    @staticmethod
+    def enter() :
+        pass
+
+    @staticmethod
+    def exit() :
+        pass
+
+    @staticmethod
+    def do() :
+        pass
+
+    def draw(self, x) :
+        self.draw(x)
+
+class mRUN :
+    @staticmethod
+    def enter() :
+        pass
+
+    @staticmethod
+    def exit() :
+        pass
+
+    @staticmethod
+    def do() :
+        pass
+
+    def draw(self, x) :
+        self.draw(x)
+
+class mATTACK :
+    @staticmethod
+    def enter() :
+        pass
+
+    @staticmethod
+    def exit() :
+        pass
+
+    @staticmethod
+    def do() :
+        pass
+
+    def draw(self, x) :
+        self.draw(x)
+
+mNext_state = {
+    mIDLE : {ID : mIDLE, RU : mRUN, AT : mATTACK},
+    mRUN : {ID : mIDLE, RU : mRUN, AT : mATTACK},
+    mATTACK : {ID : mIDLE, RU : mRUN, AT : mATTACK},
+}
+
 class Monster :
     def __init__ (self) :
         self.sprite = load_image('boss/temp.png')
@@ -10,6 +66,8 @@ class Monster :
         self.y = 120
         self.wide = 482
         self.hight = 146
+        self.q = []
+        self.cur_state = mIDLE
 
     def get_distance(self, player) :
         pass
@@ -21,9 +79,6 @@ class Monster :
         pass
 
     def attack_mid(self) :
-        pass
-
-    def move(self):
         pass
 
     def deliver_damage(self,start, end, y, player) :
@@ -41,3 +96,13 @@ class Monster :
             elif self.x <= x :
                 self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'h',400 + (self.x -x), self.y)
         pass
+
+    def update(self) :
+        self.cur_state.do(self)
+
+        if self.q :
+            event = self.q.pop()
+            if mNext_state[self.cur_state][event] != self.cur_state :
+                self.cur_state.exit(self)
+                self.cur_state = mNext_state[self.cur_state][event]
+                self.cur_state.enter(self, event)

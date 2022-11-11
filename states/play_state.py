@@ -38,7 +38,7 @@ def draw():
     clear_canvas()
     map.draw_wide()
     if boss != None :
-        boss.draw(map.map_x)
+        boss.cur_state.draw(boss,map.map_x)
     cat.cur_state.draw(cat)
     update_canvas()
 
