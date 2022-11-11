@@ -1,6 +1,6 @@
 from pico2d import *
 import game_framework
-from player.player_parameter import *
+from parameter.player_parameter import *
 
 class IDLE :
     @staticmethod
