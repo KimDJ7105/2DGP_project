@@ -8,7 +8,7 @@ ID, RU, AT = range(3)
 
 class mIDLE :
     @staticmethod
-    def enter(self) :
+    def enter(self,player) :
         print('boss enter idle')
         self.timer = 0
         pass
@@ -18,7 +18,7 @@ class mIDLE :
         pass
 
     @staticmethod
-    def do(self) :
+    def do(self,player) :
         self.timer += FRAME_PER_TIMER * TIMER_PER_TIME* game_framework.frame_time
         if self.timer >= 30 :
             self.get_event(randint(0,2))
@@ -29,9 +29,11 @@ class mIDLE :
 
 class mRUN :
     @staticmethod
-    def enter(self) :
+    def enter(self,player) :
         print('boss enter run')
         self.timer = 0
+        if abs(self.x - player.x) < 400 :
+            self.get_event(randint(0,2))
         pass
 
     @staticmethod
@@ -39,11 +41,13 @@ class mRUN :
         pass
 
     @staticmethod
-    def do(self) :
+    def do(self,player) :
         self.timer += FRAME_PER_TIMER * TIMER_PER_TIME* game_framework.frame_time
         if self.dir == 1 and self.x < 2000 or self.dir == -1 and self.x > 0 :
             self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
         if self.timer >= 30 :
+            self.get_event(randint(0,2))
+        if abs(self.x - player.x) < 400 :
             self.get_event(randint(0,2))
         pass
 
@@ -52,7 +56,7 @@ class mRUN :
 
 class mATTACK :
     @staticmethod
-    def enter(self) :
+    def enter(self,player) :
         print('boss enter attack')
         self.timer = 0
         pass
@@ -62,7 +66,7 @@ class mATTACK :
         pass
 
     @staticmethod
-    def do(self) :
+    def do(self,player) :
         self.timer += FRAME_PER_TIMER * TIMER_PER_TIME* game_framework.frame_time
         if self.timer >= 30 :
             self.get_event(randint(0,2))
@@ -124,12 +128,12 @@ class Monster :
     def get_event(self, event) :
         self.q.append(event)
 
-    def update(self) :
-        self.cur_state.do(self)
+    def update(self,player) :
+        self.cur_state.do(self, player)
 
         if self.q :
             event = self.q.pop()
             if mNext_state[self.cur_state][event] != self.cur_state :
                 self.cur_state.exit(self)
                 self.cur_state = mNext_state[self.cur_state][event]
-                self.cur_state.enter(self)
+                self.cur_state.enter(self,player)
