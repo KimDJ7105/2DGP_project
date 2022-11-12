@@ -1,15 +1,20 @@
 from pico2d import *
 import classes.player_class as cat
+from parameter.boss_parameter import *
+import game_framework
+from random import randint
 
 ID, RU, AT = range(3)
 
 class mIDLE :
     @staticmethod
-    def enter() :
+    def enter(self) :
+        print('boss enter idle')
+        self.timer = 0
         pass
 
     @staticmethod
-    def exit() :
+    def exit(self) :
         pass
 
     @staticmethod
@@ -21,11 +26,13 @@ class mIDLE :
 
 class mRUN :
     @staticmethod
-    def enter() :
+    def enter(self) :
+        print('boss enter run')
+        self.timer = 0
         pass
 
     @staticmethod
-    def exit() :
+    def exit(self) :
         pass
 
     @staticmethod
@@ -37,11 +44,13 @@ class mRUN :
 
 class mATTACK :
     @staticmethod
-    def enter() :
+    def enter(self) :
+        print('boss enter attack')
+        self.timer = 0
         pass
 
     @staticmethod
-    def exit() :
+    def exit(self) :
         pass
 
     @staticmethod
@@ -105,4 +114,4 @@ class Monster :
             if mNext_state[self.cur_state][event] != self.cur_state :
                 self.cur_state.exit(self)
                 self.cur_state = mNext_state[self.cur_state][event]
-                self.cur_state.enter(self, event)
+                self.cur_state.enter(self)
