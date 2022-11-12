@@ -18,7 +18,10 @@ class mIDLE :
         pass
 
     @staticmethod
-    def do() :
+    def do(self) :
+        self.timer += FRAME_PER_TIMER * TIMER_PER_TIME* game_framework.frame_time
+        if self.timer >= 30 :
+            self.get_event(randint(0,2))
         pass
 
     def draw(self, x) :
@@ -36,7 +39,12 @@ class mRUN :
         pass
 
     @staticmethod
-    def do() :
+    def do(self) :
+        self.timer += FRAME_PER_TIMER * TIMER_PER_TIME* game_framework.frame_time
+        if self.dir == 1 and self.x < 2000 or self.dir == -1 and self.x > 0 :
+            self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+        if self.timer >= 30 :
+            self.get_event(randint(0,2))
         pass
 
     def draw(self, x) :
@@ -54,7 +62,10 @@ class mATTACK :
         pass
 
     @staticmethod
-    def do() :
+    def do(self) :
+        self.timer += FRAME_PER_TIMER * TIMER_PER_TIME* game_framework.frame_time
+        if self.timer >= 30 :
+            self.get_event(randint(0,2))
         pass
 
     def draw(self, x) :
@@ -75,8 +86,10 @@ class Monster :
         self.y = 120
         self.wide = 482
         self.hight = 146
+        self.dir = -1
         self.q = []
         self.cur_state = mIDLE
+        self.timer = 0
 
     def get_distance(self, player) :
         pass
@@ -102,9 +115,14 @@ class Monster :
         if self.x > x - 641 and self.x < x + 641 :
             if self.x > x :
                 self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'',400 - (x - self.x), self.y)
+                self.dir = -1
             elif self.x <= x :
                 self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'h',400 + (self.x -x), self.y)
+                self.dir = 1
         pass
+
+    def get_event(self, event) :
+        self.q.append(event)
 
     def update(self) :
         self.cur_state.do(self)
