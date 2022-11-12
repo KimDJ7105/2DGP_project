@@ -423,5 +423,6 @@ class Player :
             self.add_event(ATKED)
 
     def deal_damage(self, start, end, boss, damage) :
-        if boss.x - (boss.wide / 2) <= start and boss.x + (boss.wide / 2) >= end:
-            boss.get_damage(damage)
+        if boss != None :
+            if boss.x - (boss.wide / 2) <= start and boss.x + (boss.wide / 2) >= end:
+                boss.get_damage(damage)
