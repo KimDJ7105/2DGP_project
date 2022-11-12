@@ -27,7 +27,7 @@ def exit():
 def update():
     cat.update(boss)
     if boss != None :
-        boss.update()
+        boss.update(cat)
     map.map_move(int(cat.x))
     cat.regen_stamina()
     if cat.hp <= 0 : #if player is dead
