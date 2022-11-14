@@ -10,9 +10,6 @@ def enter() :
     global retry, game_over
     retry = False
     game_over = load_image('menus/gameover.png')
-    if play_state.boss != None :
-        del play_state.boss
-        play_state.boss = None
     pass
 
 def exit():
@@ -21,6 +18,9 @@ def exit():
         play_state.cat.hp = 5
         play_state.map.set_map_type(0)
         play_state.cat.y = 550
+        for monster in play_state.boss :
+            del monster
+        play_state.boss.clear()
     elif retry == True :
         play_state.cat.hp = 5
     del retry
@@ -33,6 +33,8 @@ def update() :
 def draw() :
     clear_canvas()
     play_state.map.draw_wide()
+    for monster in play_state.boss :
+        monster.cur_state.draw(monster, play_state.map.map_x)
     play_state.cat.draw()
     game_over.draw(400,300)
     update_canvas()
