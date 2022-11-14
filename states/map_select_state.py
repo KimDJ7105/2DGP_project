@@ -41,7 +41,7 @@ def handle_events():
             elif event.key == SDLK_3 : #volcano
                 play_state.map.set_map_type(3)
                 play_state.cat.x = 400
-                play_state.boss = Boss.Monster()
+                play_state.boss.append(Boss.Monster())
                 game_framework.pop_state()
             elif event.key == SDLK_0 :
                 play_state.map.set_map_type(0)

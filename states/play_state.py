@@ -11,36 +11,38 @@ boss = None
 
 def enter() :
     global map
-    global cat
+    global cat, boss
     map = map_class.Map()
     map.set_map_type(0)
     map.set_image()
     cat = player_class.Player()
+    boss = []
 
 def exit():
     global map, cat, boss
     del map
     del cat
-    if boss != None :
-        del boss
+    for monster in boss :
+        del monster
 
 def update():
     cat.update(boss)
-    if boss != None :
-        boss.update(cat)
+    for monster in boss :
+        monster.update(cat)
+        if monster.hp <= 0 :
+            boss.remove(monster)
+            del monster
     map.map_move(int(cat.x))
     cat.regen_stamina()
     if cat.hp <= 0 : #if player is dead
-        game_framework.push_state(game_over_state)
-    elif boss!= None and boss.hp <= 0 :
         game_framework.push_state(game_over_state)
 
 
 def draw():
     clear_canvas()
     map.draw_wide()
-    if boss != None :
-        boss.cur_state.draw(boss,map.map_x)
+    for monster in boss :
+        monster.cur_state.draw(monster,map.map_x)
     cat.cur_state.draw(cat)
     update_canvas()
 
