@@ -2,6 +2,7 @@ from pico2d import *
 import game_framework
 import classes.map_class as map_class
 import classes.player_class as player_class
+import classes.monster_class as monster_class
 import states.map_select_state as map_select_state
 import states.game_over_state as game_over_state
 import parameter.boss_parameter as boss_parameter
@@ -52,6 +53,7 @@ def update():
         elif map.map_type == 1 :
             pass
         elif map.map_type == 2 :
+            boss.append(monster_class.Monster(2000, 90,'boss/mon1.png',boss_parameter.MIRA_RUN_SPEED_PPS, 80))
         elif map.map_type == 3 :
             pass
         spawn_timer = 0.0
