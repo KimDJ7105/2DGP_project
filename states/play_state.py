@@ -4,28 +4,35 @@ import classes.map_class as map_class
 import classes.player_class as player_class
 import states.map_select_state as map_select_state
 import states.game_over_state as game_over_state
+import parameter.boss_parameter as boss_parameter
 
 map = None
 cat = None
 boss = None
+spawn = None
+spawn_timer = None
 
 def enter() :
     global map
-    global cat, boss
+    global cat, boss, spawn, spawn_timer
     map = map_class.Map()
     map.set_map_type(0)
     map.set_image()
     cat = player_class.Player()
     boss = []
+    spawn = False
+    spawn_timer = 0
 
 def exit():
-    global map, cat, boss
+    global map, cat, boss, spawn
     del map
     del cat
+    del spawn
     for monster in boss :
         del monster
 
 def update():
+    global spawn_timer, spawn
     cat.update(boss)
     for monster in boss :
         monster.update(cat)
@@ -36,6 +43,18 @@ def update():
     cat.regen_stamina()
     if cat.hp <= 0 : #if player is dead
         game_framework.push_state(game_over_state)
+    if spawn == True:
+        spawn_timer += boss_parameter.FRAME_PER_SPAWN * boss_parameter.SPAWN_PER_TIME* game_framework.frame_time
+    if int(spawn_timer) == 15:
+        print('monster spawn')
+        if map.map_type == 0 :
+            spawn = False
+        elif map.map_type == 1 :
+            pass
+        elif map.map_type == 2 :
+        elif map.map_type == 3 :
+            pass
+        spawn_timer = 0.0
 
 
 def draw():
