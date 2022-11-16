@@ -4,36 +4,13 @@ from parameter.boss_parameter import *
 import game_framework
 from random import randint
 
-ID, RU, AT = range(3)
-
-class mIDLE :
-    @staticmethod
-    def enter(self,player) :
-        print('boss enter idle')
-        self.timer = 0
-        pass
-
-    @staticmethod
-    def exit(self) :
-        pass
-
-    @staticmethod
-    def do(self,player) :
-        self.timer += FRAME_PER_TIMER * TIMER_PER_TIME* game_framework.frame_time
-        if self.timer >= 30 :
-            self.get_event(randint(0,2))
-        pass
-
-    def draw(self, x) :
-        self.draw(x)
+RU, AT = range(2)
 
 class mRUN :
     @staticmethod
     def enter(self,player) :
         print('boss enter run')
         self.timer = 0
-        if abs(self.x - player.x) < 400 :
-            self.get_event(randint(0,2))
         pass
 
     @staticmethod
@@ -42,13 +19,10 @@ class mRUN :
 
     @staticmethod
     def do(self,player) :
-        self.timer += FRAME_PER_TIMER * TIMER_PER_TIME* game_framework.frame_time
         if self.dir == 1 and self.x < 2000 or self.dir == -1 and self.x > 0 :
-            self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
-        if self.timer >= 30 :
-            self.get_event(randint(0,2))
-        if abs(self.x - player.x) < 400 :
-            self.get_event(randint(0,2))
+            self.x += self.dir * self.speed * game_framework.frame_time
+        if abs(player.x - self.x)  < 15 :
+            self.get_event(AT)
         pass
 
     def draw(self, x) :
@@ -67,32 +41,31 @@ class mATTACK :
 
     @staticmethod
     def do(self,player) :
-        self.timer += FRAME_PER_TIMER * TIMER_PER_TIME* game_framework.frame_time
-        if self.timer >= 30 :
-            self.get_event(randint(0,2))
+        player.get_damage(1)
+        self.get_event(RU)
         pass
 
     def draw(self, x) :
         self.draw(x)
 
 mNext_state = {
-    mIDLE : {ID : mIDLE, RU : mRUN, AT : mATTACK},
-    mRUN : {ID : mIDLE, RU : mRUN, AT : mATTACK},
-    mATTACK : {ID : mIDLE, RU : mRUN, AT : mATTACK},
+    mRUN : { RU : mRUN, AT : mATTACK},
+    mATTACK : { RU : mRUN, AT : mATTACK},
 }
 
 class Monster :
-    def __init__ (self) :
-        self.sprite = load_image('boss/temp.png')
-        self.hp = 100
+    def __init__ (self, _x, _y, name, _speed, _hp) :
+        self.sprite = load_image(name)
+        self.hp = _hp
         self.atk_count = 0
-        self.x = 1400
-        self.y = 120
+        self.x = _x
+        self.y = _y
+        self.speed = _speed
         self.wide = 482
         self.hight = 146
         self.dir = -1
         self.q = []
-        self.cur_state = mIDLE
+        self.cur_state = mRUN
         self.timer = 0
 
     def get_distance(self, player) :
