@@ -164,9 +164,9 @@ class ATTACK :
     @staticmethod
     def exit(self, boss) :
         if self.last_dir == 1 :
-            self.deal_damage(self.x, self.x + 40, boss, self.atk)
+            self.deal_damage(self.x, self.x + 15, boss, self.atk)
         elif self.last_dir == -1 :
-            self.deal_damage(self.x - 40, self.x, boss, self.atk)
+            self.deal_damage(self.x - 15, self.x, boss, self.atk)
         self.atking = False
         pass
 
@@ -282,9 +282,9 @@ class SP_2 :
     def exit(self, boss) :
         self.atking = False
         if self.last_dir == 1 :
-            self.deal_damage(self.x, self.x + 40, boss, charge // 10)
+            self.deal_damage(self.x, self.x + 15, boss, charge // 10)
         elif self.last_dir == -1 :
-            self.deal_damage(self.x - 40, self.x, boss, charge // 10)
+            self.deal_damage(self.x - 15, self.x, boss, charge // 10)
         #after boss
         pass
 
@@ -428,3 +428,7 @@ class Player :
                 pass
             else :
                 monster.get_damage(damage)
+                if self.last_dir == 1 :
+                    monster.x += 25
+                elif self.last_dir == -1 :
+                    monster.x -= 25
