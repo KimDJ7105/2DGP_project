@@ -52,15 +52,15 @@ mNext_state = {
 }
 
 class Monster :
-    def __init__ (self, _x, _y, name, _speed, _hp) :
+    def __init__ (self, _x, _y, name, _speed, _hp, _w,_h) :
         self.sprite = load_image(name)
         self.hp = _hp
         self.atk_count = 0
         self.x = _x
         self.y = _y
         self.speed = _speed
-        self.wide = 482
-        self.hight = 146
+        self.wide = _w
+        self.hight = _h
         self.dir = -1
         self.q = []
         self.cur_state = mRUN
