@@ -69,7 +69,7 @@ def draw():
     clear_canvas()
     map.draw_wide()
     for monster in boss :
-        monster.cur_state.draw(monster,map.map_x)
+        monster.cur_state.draw(monster,cat.x)
     cat.cur_state.draw(cat)
     update_canvas()
 
