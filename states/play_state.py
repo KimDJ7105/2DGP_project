@@ -1,4 +1,5 @@
 from pico2d import *
+from random import randint
 import game_framework
 import classes.map_class as map_class
 import classes.player_class as player_class
@@ -55,7 +56,10 @@ def update():
         elif map.map_type == 1 :
             pass
         elif map.map_type == 2 :
-            boss.append(monster_class.Monster(2000, 90,'boss/mon1.png',boss_parameter.MIRA_RUN_SPEED_PPS, 80))
+            if randint(0, 2) == 0 :
+                boss.append(monster_class.Monster(2000, 90,'boss/mon1.png',boss_parameter.MIRA_RUN_SPEED_PPS, 80, 100, 100))
+            else :
+                boss.append(monster_class.Monster(0, 90,'boss/mon1.png',boss_parameter.MIRA_RUN_SPEED_PPS, 80, 100, 100))
         elif map.map_type == 3 :
             pass
         spawn_timer = 0.0
