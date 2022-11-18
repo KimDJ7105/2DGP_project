@@ -87,13 +87,30 @@ class Monster :
         print(f'get {damage} damage, remain HP {self.hp}')
 
     def draw(self, x) :
-        if self.x > x - 641 and self.x < x + 641 :
-            if self.x > x :
-                self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'',400 - (x - self.x), self.y)
-                self.dir = -1
-            elif self.x <= x :
-                self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'h',400 + (self.x -x), self.y)
-                self.dir = 1
+        if x > 400 and x < 1600 :
+            if self.x > x - (400 + self.wide // 2) and self.x < x + (400 + self.wide // 2) :
+                if self.x > x :
+                    self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'',400 - (x - self.x), self.y)
+                    self.dir = -1
+                elif self.x <= x :
+                    self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'h',400 + (self.x -x), self.y)
+                    self.dir = 1
+        elif x <= 400:
+            if self.x > 0 and self.x < 800 :
+                if self.x > x :
+                    self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'',self.x, self.y)
+                    self.dir = -1
+                elif self.x <= x :
+                    self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'h',self.x, self.y)
+                    self.dir = 1
+        elif x >= 1600 :
+            if self.x > 1200 and self.x < 2000 :
+                if self.x > x :
+                    self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'',400 - (1600 - self.x), self.y)
+                    self.dir = -1
+                elif self.x <= x :
+                    self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'h',400 + (self.x - 1600), self.y)
+                    self.dir = 1
         pass
 
     def get_event(self, event) :
