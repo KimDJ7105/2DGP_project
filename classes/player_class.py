@@ -406,6 +406,20 @@ class Player :
                 self.cur_state.exit(self, boss)
                 self.cur_state = next_state[self.cur_state][event]
                 self.cur_state.enter(self, event)
+        
+        if self.atk_on :
+            if self.item_level['SWORD'] == 1 and self.exp == 100:
+                self.sprite = load_image('player/sword2.png')
+                self.atk = 25
+                self.item_level['SWORD'] = 2
+                self.exp = 0
+                print('level up')
+            elif self.item_level['SWORD'] == 2 and self.exp == 120 :
+                self.sprite = load_image('player/sword3.png')
+                self.atk = 45
+                self.item_level['SWORD'] = 3
+                self.exp = 0
+                print('level up')
 
     def handle_event(self, event) :
         if (event.type , event.key) in key_event_table :
