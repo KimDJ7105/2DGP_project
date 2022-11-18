@@ -9,7 +9,6 @@ RU, AT = range(2)
 class mRUN :
     @staticmethod
     def enter(self,player) :
-        print('boss enter run')
         self.timer = 0
         pass
 
@@ -31,7 +30,6 @@ class mRUN :
 class mATTACK :
     @staticmethod
     def enter(self,player) :
-        print('boss enter attack')
         self.timer = 0
         pass
 
@@ -41,7 +39,7 @@ class mATTACK :
 
     @staticmethod
     def do(self,player) :
-        player.get_damage(1)
+        player.get_damage(0)
         self.get_event(RU)
         pass
 
