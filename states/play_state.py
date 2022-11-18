@@ -40,6 +40,8 @@ def update():
         if monster.hp <= 0 :
             boss.remove(monster)
             del monster
+            cat.exp += 5
+            print(cat.exp)
     map.map_move(int(cat.x))
     cat.regen_stamina()
     if cat.hp <= 0 : #if player is dead

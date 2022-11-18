@@ -339,6 +339,7 @@ class Player :
         self.atk_on = False
         self.atking = False
         self.atked = False
+        self.exp = 0
 
     def draw(self) :
         if self.atk_on == False :
