@@ -33,20 +33,20 @@ def handle_events():
         if event.type == SDL_KEYDOWN :
             if event.key == SDLK_1 : #
                 play_state.map.set_map_type(1)
-                play_state.cat.x = 400
+                play_state.cat.x = 1000
                 game_framework.pop_state()
             elif event.key == SDLK_2 : #desert
                 play_state.map.set_map_type(2)
-                play_state.cat.x = 400
+                play_state.cat.x = 1000
                 play_state.spawn = True
                 game_framework.pop_state()
             elif event.key == SDLK_3 : #volcano
                 play_state.map.set_map_type(3)
-                play_state.cat.x = 400
+                play_state.cat.x = 1000
                 game_framework.pop_state()
             elif event.key == SDLK_0 :
                 play_state.map.set_map_type(0)
-                play_state.cat.x = 400
+                play_state.cat.x = 1000
                 play_state.boss = None
                 game_framework.pop_state()
         elif event.type == SDL_QUIT :
