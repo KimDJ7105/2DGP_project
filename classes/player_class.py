@@ -414,13 +414,11 @@ class Player :
                 self.atk = 25
                 self.item_level['SWORD'] = 2
                 self.exp = 0
-                print('level up')
             elif self.item_level['SWORD'] == 2 and self.exp == 120 :
                 self.sprite = load_image('player/sword3.png')
                 self.atk = 45
                 self.item_level['SWORD'] = 3
                 self.exp = 0
-                print('level up')
 
     def handle_event(self, event) :
         if (event.type , event.key) in key_event_table :

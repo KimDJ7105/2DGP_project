@@ -42,7 +42,6 @@ def update():
             boss.remove(monster)
             del monster
             cat.exp += 5
-            print(cat.exp)
     map.map_move(int(cat.x))
     cat.regen_stamina()
     if cat.hp <= 0 : #if player is dead
@@ -50,7 +49,6 @@ def update():
     if spawn == True:
         spawn_timer += boss_parameter.FRAME_PER_SPAWN * boss_parameter.SPAWN_PER_TIME* game_framework.frame_time
     if int(spawn_timer) == 15:
-        print('monster spawn')
         if map.map_type == 0 :
             spawn = False
         elif map.map_type == 1 :
@@ -70,6 +68,7 @@ def draw():
     map.draw_wide()
     for monster in boss :
         monster.cur_state.draw(monster,cat.x)
+        print(f'x : {monster.x} y : {monster.y}')
     cat.cur_state.draw(cat)
     update_canvas()
 
