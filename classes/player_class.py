@@ -1,6 +1,7 @@
 from pico2d import *
 import game_framework
 from parameter.player_parameter import *
+import states.play_state as play_state
 
 class IDLE :
     @staticmethod
@@ -432,10 +433,12 @@ class Player :
     def add_jump(self) :
         self.add_event(WD)
 
-    def get_damage(self, damage) :
+    def get_damage(self, damage, monster) :
         if self.roll == False and self.atked == False :
             self.hp -= damage
             self.add_event(ATKED)
+            play_state.boss.remove(monster)
+            del monster
 
     def deal_damage(self, start, end, boss, damage) :
         for monster in boss :
