@@ -1,8 +1,7 @@
 from pico2d import *
 import states.play_state as play_state
 import game_framework
-import classes.monster_class as Boss
-from parameter.boss_parameter import *
+import states.game_world as game_world
 
 map_select = None
 
@@ -38,7 +37,7 @@ def handle_events():
             elif event.key == SDLK_2 : #desert
                 play_state.map.set_map_type(2)
                 play_state.cat.x = 1000
-                play_state.spawn = True
+                game_world.spawn = True
                 game_framework.pop_state()
             elif event.key == SDLK_3 : #volcano
                 play_state.map.set_map_type(3)
@@ -47,7 +46,6 @@ def handle_events():
             elif event.key == SDLK_0 :
                 play_state.map.set_map_type(0)
                 play_state.cat.x = 1000
-                play_state.boss = None
                 game_framework.pop_state()
         elif event.type == SDL_QUIT :
             game_framework.quit()

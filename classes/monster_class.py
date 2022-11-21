@@ -1,9 +1,7 @@
 from pico2d import *
-import classes.player_class as cat
 from parameter.boss_parameter import *
 import game_framework
 from random import randint
-import states.play_state as play_state
 
 RU, AT = range(2)
 

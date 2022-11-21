@@ -1,74 +1,36 @@
 from pico2d import *
 from random import randint
 import game_framework
+import states.map_select_state as map_select_state
+import states.game_world as game_world
 import classes.map_class as map_class
 import classes.player_class as player_class
-import classes.monster_class as monster_class
-import states.map_select_state as map_select_state
-import states.game_over_state as game_over_state
-import parameter.boss_parameter as boss_parameter
 
 map = None
 cat = None
-boss = None
-spawn = None
-spawn_timer = None
 
 def enter() :
     global map
-    global cat, boss, spawn, spawn_timer
+    global cat
     map = map_class.Map()
     map.set_map_type(0)
     map.set_image()
     cat = player_class.Player()
-    boss = []
-    spawn = False
-    spawn_timer = 0
+    game_world.world.append(cat)
+    game_world.world.append(map)
 
 def exit():
-    global map, cat, boss, spawn
-    del map
-    del cat
-    del spawn
-    for monster in boss :
-        del monster
+    game_world.clear()
 
 def update():
-    global spawn_timer, spawn
-    cat.update(boss)
-    for monster in boss :
-        monster.update(cat)
-        if monster.hp <= 0 :
-            boss.remove(monster)
-            del monster
-            cat.exp += 5
-    map.map_move(int(cat.x))
-    cat.regen_stamina()
-    if cat.hp <= 0 : #if player is dead
-        game_framework.push_state(game_over_state)
-    if spawn == True:
-        spawn_timer += boss_parameter.FRAME_PER_SPAWN * boss_parameter.SPAWN_PER_TIME* game_framework.frame_time
-    if int(spawn_timer) == 15:
-        if map.map_type == 0 :
-            spawn = False
-        elif map.map_type == 1 :
-            pass
-        elif map.map_type == 2 :
-            if randint(0, 2) == 0 :
-                boss.append(monster_class.Monster(2000, 90,'boss/mon1.png',boss_parameter.MIRA_RUN_SPEED_PPS, 80, 100, 100))
-            else :
-                boss.append(monster_class.Monster(0, 90,'boss/mon1.png',boss_parameter.MIRA_RUN_SPEED_PPS, 80, 100, 100))
-        elif map.map_type == 3 :
-            pass
-        spawn_timer = 0.0
-
+    game_world.world_update(cat, map)
+    game_world.spawn_monster(map.map_type,randint(0, 2))
 
 def draw():
     clear_canvas()
     map.draw_wide()
-    for monster in boss :
+    for monster in game_world.monsters :
         monster.cur_state.draw(monster,cat.x)
-        print(f'x : {monster.x} y : {monster.y}')
     cat.cur_state.draw(cat)
     update_canvas()
 

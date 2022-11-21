@@ -1,7 +1,7 @@
 from pico2d import *
 import game_framework
 from parameter.player_parameter import *
-import states.play_state as play_state
+import states.game_world as game_world
 
 class IDLE :
     @staticmethod
@@ -435,8 +435,7 @@ class Player :
         if self.roll == False and self.atked == False :
             self.hp -= damage
             self.add_event(ATKED)
-            play_state.boss.remove(monster)
-            del monster
+            game_world.remove_object(monster)
 
     def deal_damage(self, start, end, boss, damage) :
         for monster in boss :
