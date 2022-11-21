@@ -41,6 +41,7 @@ class mATTACK :
     @staticmethod
     def do(self,player) :
         player.get_damage(0, self)
+        self.get_event(RU)
         pass
 
     def draw(self, x) :
