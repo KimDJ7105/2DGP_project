@@ -370,12 +370,6 @@ class Player :
     def draw_stamina(self) :
         self.stamina_bar.draw(400,550,self.stamina,25)
 
-    def regen_stamina(self) :
-        if self.stamina < 100 and self.atking == False:
-            self.stamina += FRAME_PER_REGEN * REGEN_PER_TIME* game_framework.frame_time
-        if self.stamina > 100 :
-            self.stamina = 100
-
     def add_event(self, key_event) :
         self.q.insert(0,key_event)
 
@@ -419,6 +413,11 @@ class Player :
                 self.atk = 45
                 self.item_level['SWORD'] = 3
                 self.exp = 0
+
+        if self.stamina < 100 and self.atking == False:
+            self.stamina += FRAME_PER_REGEN * REGEN_PER_TIME* game_framework.frame_time
+        if self.stamina > 100 :
+            self.stamina = 100
 
     def handle_event(self, event) :
         if (event.type , event.key) in key_event_table :
