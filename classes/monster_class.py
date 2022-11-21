@@ -3,6 +3,7 @@ import classes.player_class as cat
 from parameter.boss_parameter import *
 import game_framework
 from random import randint
+import states.play_state as play_state
 
 RU, AT = range(2)
 
@@ -39,8 +40,7 @@ class mATTACK :
 
     @staticmethod
     def do(self,player) :
-        player.get_damage(0)
-        self.get_event(RU)
+        player.get_damage(0, self)
         pass
 
     def draw(self, x) :
@@ -61,7 +61,10 @@ class Monster :
         self.speed = _speed
         self.wide = _w
         self.hight = _h
-        self.dir = -1
+        if self.x == 2000 :
+            self.dir = -1
+        elif self.x == 0 :
+            self.dir = 1
         self.q = []
         self.cur_state = mRUN
         self.timer = 0
