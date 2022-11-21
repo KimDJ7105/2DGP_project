@@ -446,3 +446,6 @@ class Player :
                     monster.x += 25
                 elif self.last_dir == -1 :
                     monster.x -= 25
+                if monster.hp <= 0 :
+                    game_world.remove_object(monster)
+                    self.exp += 5
