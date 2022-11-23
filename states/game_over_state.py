@@ -17,12 +17,15 @@ def exit():
     if retry == False :
         play_state.cat.hp = 5
         play_state.map.set_map_type(0)
-        play_state.cat.y = 550
+        play_state.cat.y = 1000
+        play_state.cat.hp_potion = 5
         for monster in play_state.boss :
             del monster
         play_state.boss.clear()
     elif retry == True :
         play_state.cat.hp = 5
+        play_state.cat.hp_potion = 5
+        play_state.cat.y = 1000
     del retry
     del game_over
     pass
