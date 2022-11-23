@@ -63,9 +63,10 @@ def spawn_monster(_type, _pos):
                 pass
             elif _type == 2 :
                 if _pos == 0 :
-                    add_object(monster_class.Monster(2000, 90,'boss/mon1.png',boss_parameter.MIRA_RUN_SPEED_PPS, 80, 100, 100),'monster')
+                    add_object(monster_class.Monster(2000, 90,'boss/mon1.png',boss_parameter.MIRA_RUN_SPEED_PPS, 60, 100, 100),'monster')
                 else :
-                    add_object(monster_class.Monster(0, 90,'boss/mon1.png',boss_parameter.MIRA_RUN_SPEED_PPS, 80, 100, 100),'monster')
+                    add_object(monster_class.Monster(0, 90,'boss/mon1.png',boss_parameter.MIRA_RUN_SPEED_PPS, 60, 100, 100),'monster')
             elif _type == 3 :
                 pass
             spawn_timer = 0.0
+            print('monster spawned')
