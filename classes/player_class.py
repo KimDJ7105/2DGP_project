@@ -341,6 +341,7 @@ class Player :
         self.atking = False
         self.atked = False
         self.exp = 0
+        self.hp_potion = 5
 
     def draw(self) :
         if self.atk_on == False :
@@ -449,3 +450,8 @@ class Player :
                 if monster.hp <= 0 :
                     game_world.remove_object(monster)
                     self.exp += 5
+
+    def heal_hp(self) :
+        if self.hp_potion > 0 and self.hp < 5 :
+            self.hp += 1
+            self.hp_potion -= 1

@@ -50,6 +50,8 @@ def handle_events():
             elif event.key == SDLK_SPACE:
                 if cat.stamina > 30 and cat.roll == False:
                     cat.add_roll()
+            elif event.key == SDLK_r and event.type == SDL_KEYUP:
+                cat.heal_hp()
             elif event.type == SDL_KEYDOWN and event.key == SDLK_h :
                 cat.get_damage(1)
             else :
