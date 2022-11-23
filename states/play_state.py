@@ -22,8 +22,8 @@ def enter() :
     map.set_map_type(0)
     map.set_image()
     cat = player_class.Player()
-    game_world.world.append(cat)
-    game_world.world.append(map)
+    game_world.add_object(cat,'player')
+    game_world.add_object(map,'player')
 
 def exit():
     global font
