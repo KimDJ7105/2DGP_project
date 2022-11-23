@@ -8,10 +8,16 @@ import classes.player_class as player_class
 
 map = None
 cat = None
+font = None
+timer = None
 
 def enter() :
     global map
     global cat
+    global font
+    global timer
+    timer = 0
+    font = load_font('menus/ENCR10B.TTF', 16)
     map = map_class.Map()
     map.set_map_type(0)
     map.set_image()
@@ -20,6 +26,8 @@ def enter() :
     game_world.world.append(map)
 
 def exit():
+    global font
+    del font
     game_world.clear()
 
 def update():
@@ -32,6 +40,8 @@ def draw():
     for monster in game_world.monsters :
         monster.cur_state.draw(monster,cat.x)
     cat.cur_state.draw(cat)
+    if map.map_type != 0 :
+        font.draw(750, 550, f'{(get_time() - timer):.2f}', (255, 255, 255))
     update_canvas()
 
 
