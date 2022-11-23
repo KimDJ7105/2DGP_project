@@ -7,12 +7,14 @@ spawn = False
 spawn_timer = 0
 
 monsters = []
-
-world = [monsters, ]
+players = []
+world = [monsters, players]
 
 def add_object(o, depth) :
     if depth == 'monster' :
         world[0].append(o)
+    elif depth == 'player' :
+        world[1].append(o)
 
 def remove_object(o) :
     for list in world :
