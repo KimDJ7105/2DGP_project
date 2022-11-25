@@ -2,6 +2,7 @@ from pico2d import *
 import game_framework
 from parameter.player_parameter import *
 import states.game_world as game_world
+from classes.monster_class import KIA
 
 class IDLE :
     @staticmethod
@@ -435,7 +436,6 @@ class Player :
         if self.roll == False and self.atked == False :
             self.hp -= damage
             self.add_event(ATKED)
-            game_world.remove_object(monster)
 
     def deal_damage(self, start, end, boss, damage) :
         for monster in boss :
@@ -448,10 +448,15 @@ class Player :
                 elif self.last_dir == -1 :
                     monster.x -= 25
                 if monster.hp <= 0 :
-                    game_world.remove_object(monster)
+                    monster.get_event(KIA)
                     self.exp += 5
 
     def heal_hp(self) :
         if self.hp_potion > 0 and self.hp < 5 :
             self.hp += 1
             self.hp_potion -= 1
+
+    def attack_able(self) :
+        if self.roll == False and self.atked == False :
+            return True
+        else : return False

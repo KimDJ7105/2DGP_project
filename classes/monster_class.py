@@ -2,13 +2,13 @@ from pico2d import *
 from parameter.boss_parameter import *
 import game_framework
 from random import randint
+import states.game_world as game_world
 
-RU, AT = range(2)
+RU, AT, KIA = range(3)
 
 class mRUN :
     @staticmethod
     def enter(self,player) :
-        self.timer = 0
         pass
 
     @staticmethod
@@ -29,7 +29,6 @@ class mRUN :
 class mATTACK :
     @staticmethod
     def enter(self,player) :
-        self.timer = 0
         pass
 
     @staticmethod
@@ -38,16 +37,38 @@ class mATTACK :
 
     @staticmethod
     def do(self,player) :
-        player.get_damage(0, self)
-        self.get_event(RU)
+        if player.attack_able() == True :
+            self.get_event(KIA)
+        else :
+            self.get_event(RU)
+        pass
+
+    def draw(self, x) :
+        self.draw(x)
+
+class mDEAD :
+    @staticmethod
+    def enter(self,player) :
+        if self.hp > 0 :
+            player.get_damage(0, self)
+        pass
+
+    @staticmethod
+    def exit(self) :
+        pass
+
+    @staticmethod
+    def do(self,player) :
+        game_world.remove_object(self)
         pass
 
     def draw(self, x) :
         self.draw(x)
 
 mNext_state = {
-    mRUN : { RU : mRUN, AT : mATTACK},
-    mATTACK : { RU : mRUN, AT : mATTACK},
+    mRUN : { RU : mRUN, AT : mATTACK, KIA : mDEAD},
+    mATTACK : { RU : mRUN, AT : mATTACK, KIA : mDEAD},
+    mDEAD : {RU : mDEAD, AT : mDEAD, KIA : mDEAD} 
 }
 
 class Monster :
@@ -66,7 +87,6 @@ class Monster :
             self.dir = 1
         self.q = []
         self.cur_state = mRUN
-        self.timer = 0
 
     def get_distance(self, player) :
         pass
