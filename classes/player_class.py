@@ -384,19 +384,12 @@ class Player :
 
     def set_sword(self) :
         if self.atk_on == False :
-            self.sprite = load_image('player/sword.png')
             self.atk_on = True
             self.atk = 10
             self.item = 'SWORD'
         elif self.atk_on == True:
-            if self.item_level['SWORD'] == 1:
-                self.sprite = load_image('player/sword2.png')
-                self.atk = 25
-                self.item_level['SWORD'] = 2
-            elif self.item_level['SWORD'] == 2:
-                self.sprite = load_image('player/sword3.png')
-                self.atk = 45
-                self.item_level['SWORD'] = 3
+            self.level_up()
+        self.set_sprite()
 
     def update(self, boss) :
         self.cur_state.do(self)
@@ -409,16 +402,10 @@ class Player :
                 self.cur_state.enter(self, event)
         
         if self.atk_on :
-            if self.item_level['SWORD'] == 1 and self.exp == 100:
-                self.sprite = load_image('player/sword2.png')
-                self.atk = 25
-                self.item_level['SWORD'] = 2
-                self.exp = 0
-            elif self.item_level['SWORD'] == 2 and self.exp == 120 :
-                self.sprite = load_image('player/sword3.png')
-                self.atk = 45
-                self.item_level['SWORD'] = 3
-                self.exp = 0
+            if self.item_level[self.item] == 1 and self.exp == 100:
+                self.level_up()
+            elif self.item_level[self.item] == 2 and self.exp == 120 :
+                self.level_up()
 
         if self.stamina < 100 and self.atking == False:
             self.stamina += FRAME_PER_REGEN * REGEN_PER_TIME* game_framework.frame_time
@@ -464,6 +451,27 @@ class Player :
         if self.roll == False and self.atked == False :
             return True
         else : return False
+
+    def set_sprite(self) :
+        if self.atk_on == False :
+            self.sprite = load_image('player/standard.png')
+        if self.item == 'SWORD' :
+            if self.item_level[self.item] == 1 :
+                self.sprite = load_image('player/sword.png')
+            elif self.item_level[self.item] == 2 :
+                self.sprite = load_image('player/sword2.png')
+            elif self.item_level[self.item] == 3 :
+                self.sprite = load_image('player/sword3.png')
+
+    def level_up(self) :
+        if self.atk == 10 :
+            self.atk = 25
+        elif self.atk == 25 :
+            self.atk = 45
+        self.item_level[self.item] += 1
+        self.exp = 0
+        self.set_sprite()
+
     def __getstate__(self):
         state = {'atk': self.atk, 'item': self.item, 'item_level': self.item_level, 'exp' : self.exp, 'atk_on' : self.atk_on}
         return state
