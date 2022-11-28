@@ -3,6 +3,8 @@ from random import randint
 import game_framework
 import states.map_select_state as map_select_state
 import states.game_world as game_world
+import states.save_state as save_state
+import states.load_state as load_state
 import classes.map_class as map_class
 import classes.player_class as player_class
 
@@ -51,7 +53,10 @@ def handle_events():
         if event.type == SDL_KEYDOWN or event.type == SDL_KEYUP:
             if event.key == SDLK_s :
                 # if cat.x > 1860 and cat.x < 2000 :
-                game_framework.push_state(map_select_state)
+                # game_framework.push_state(map_select_state)
+                game_framework.push_state(save_state)
+            elif event.key == SDLK_l :
+                game_framework.push_state(load_state)
             elif event.key == SDLK_z and event.type == SDL_KEYDOWN:
                 cat.set_sword()
             elif event.key == SDLK_w :
