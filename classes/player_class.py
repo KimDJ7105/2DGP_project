@@ -344,6 +344,10 @@ class Player :
         self.exp = 0
         self.hp_potion = 5
 
+    def load(self, state):
+        self.atk, self.item , self.item_level , self.exp, self.atk_on = state['atk'], state['item'], state['level'], state['exp'], state['atk_on']
+        self.set_sprite()
+
     def draw(self) :
         if self.atk_on == False :
             if self.x > 400 and self.x < 1600 : 
@@ -460,3 +464,10 @@ class Player :
         if self.roll == False and self.atked == False :
             return True
         else : return False
+    def __getstate__(self):
+        state = {'atk': self.atk, 'item': self.item, 'item_level': self.item_level, 'exp' : self.exp, 'atk_on' : self.atk_on}
+        return state
+
+    def __setstate(self, state) :
+        self.init()
+        self.__dict__.update(state)
