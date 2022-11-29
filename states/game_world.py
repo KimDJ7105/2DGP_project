@@ -35,6 +35,11 @@ def clear():
     for layer in world:
         layer.clear()
 
+def clear_monsters() :
+    for m in monsters :
+        monsters.remove(m)
+        del m
+
 def monster_update(player) :
     for monster in monsters :
         monster.update(player)
