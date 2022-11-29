@@ -28,7 +28,7 @@ def handle_events():
             if event.key == SDLK_1 :
                 with open('save1.pickle', 'rb') as f:
                     state = pickle.load(f)
-                    play_state.cat = state
+                    play_state.cat.load(state)
                 game_framework.pop_state()
             elif event.key == SDLK_2 :
                 with open('save2.pickle', 'rb') as f:

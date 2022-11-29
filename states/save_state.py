@@ -4,12 +4,10 @@ from pico2d import *
 import game_framework
 
 save_data = None
-save_data2 = None
 
 def enter():
-    global save_data, save_data2
+    global save_data
     save_data = {'atk': play_state.cat.atk, 'item': play_state.cat.item, 'level': play_state.cat.item_level, 'exp' : play_state.cat.exp, 'atk_on' : play_state.cat.atk_on}
-    save_data2 = play_state.cat
     print(save_data)
 
 
@@ -34,7 +32,7 @@ def handle_events():
         if event.type == SDL_KEYDOWN :
             if event.key == SDLK_1 :
                 with open('save1.pickle', 'wb') as f:
-                    pickle.dump(save_data2,f)
+                    pickle.dump(save_data,f)
                 game_framework.pop_state()
             elif event.key == SDLK_2 :
                 with open('save2.pickle', 'wb') as f:
