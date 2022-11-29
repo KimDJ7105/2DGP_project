@@ -2,6 +2,7 @@ from pico2d import *
 from random import randint
 import game_framework
 import states.map_select_state as map_select_state
+import states.stage_clear_state as stage_clear_state
 import states.game_world as game_world
 import states.save_state as save_state
 import states.load_state as load_state
@@ -35,6 +36,9 @@ def exit():
 def update():
     game_world.world_update(cat, map)
     game_world.spawn_monster(map.map_type,randint(0, 2))
+    if map.map_type == 1 or map.map_type == 2 :
+        if (get_time() - timer) >= 120.0 :
+            game_framework.push_state(stage_clear_state)
 
 def draw():
     clear_canvas()
