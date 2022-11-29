@@ -52,9 +52,10 @@ def handle_events():
     for event in events :
         if event.type == SDL_KEYDOWN or event.type == SDL_KEYUP:
             if event.key == SDLK_s :
-                # if cat.x > 1860 and cat.x < 2000 :
-                # game_framework.push_state(map_select_state)
-                game_framework.push_state(save_state)
+                if cat.x > 1860 and cat.x < 2000 :
+                    game_framework.push_state(map_select_state)
+                else :
+                    game_framework.push_state(save_state)
             elif event.key == SDLK_l :
                 game_framework.push_state(load_state)
             elif event.key == SDLK_z and event.type == SDL_KEYDOWN:
