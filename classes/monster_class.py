@@ -17,6 +17,7 @@ class mRUN :
 
     @staticmethod
     def do(self,player) :
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME* game_framework.frame_time) % 5
         if self.dir == 1 and self.x < 2000 or self.dir == -1 and self.x > 0 :
             self.x += self.dir * self.speed * game_framework.frame_time
         if abs(player.x - self.x)  < 15 :
@@ -50,7 +51,7 @@ class mDEAD :
     @staticmethod
     def enter(self,player) :
         if self.hp > 0 :
-            player.get_damage(0, self)
+            player.get_damage(1, self)
         pass
 
     @staticmethod
@@ -81,6 +82,7 @@ class Monster :
         self.speed = _speed
         self.wide = _w
         self.hight = _h
+        self.frame = 0
         if self.x == 2000 :
             self.dir = -1
         elif self.x == 0 :
@@ -112,26 +114,26 @@ class Monster :
         if x > 400 and x < 1600 :
             if self.x > x - (400 + self.wide // 2) and self.x < x + (400 + self.wide // 2) :
                 if self.x > x :
-                    self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'',400 - (x - self.x), self.y)
+                    self.sprite.clip_composite_draw(int(self.frame)* 150,0,self.wide,self.hight,0,'',400 - (x - self.x), self.y,150,150)
                     self.dir = -1
                 elif self.x <= x :
-                    self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'h',400 + (self.x -x), self.y)
+                    self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'h',400 + (self.x -x), self.y,150,150)
                     self.dir = 1
         elif x <= 400:
             if self.x > 0 and self.x < 800 :
                 if self.x > x :
-                    self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'',self.x, self.y)
+                    self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'',self.x, self.y,150,150)
                     self.dir = -1
                 elif self.x <= x :
-                    self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'h',self.x, self.y)
+                    self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'h',self.x, self.y,150,150)
                     self.dir = 1
         elif x >= 1600 :
             if self.x > 1200 and self.x < 2000 :
                 if self.x > x :
-                    self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'',400 - (1600 - self.x), self.y)
+                    self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'',400 - (1600 - self.x), self.y,150,150)
                     self.dir = -1
                 elif self.x <= x :
-                    self.sprite.clip_composite_draw(0,0,self.wide,self.hight,0,'h',400 + (self.x - 1600), self.y)
+                    self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'h',400 + (self.x - 1600), self.y,150,150)
                     self.dir = 1
         pass
 
