@@ -343,6 +343,7 @@ class Player :
         self.atked = False
         self.exp = 0
         self.hp_potion = 5
+        self.hp_image = load_image('player/potion.png')
 
     def load(self, state):
         self.atk, self.item , self.item_level , self.exp, self.atk_on = state['atk'], state['item'], state['level'], state['exp'], state['atk_on']
@@ -365,6 +366,8 @@ class Player :
                 self.sprite.clip_draw(int(self.frame) * 200, self.line * 200 , 200, 200, 400 + (self.x - 1600), self.y + 50)
         self.draw_heart()
         self.draw_stamina()
+        self.draw_potion()
+
 
     def draw_heart(self) :
         tem_x = 50
@@ -375,6 +378,12 @@ class Player :
 
     def draw_stamina(self) :
         self.stamina_bar.draw(400,550,self.stamina,25)
+
+    def draw_potion(self) :
+        tmp_x = 50
+        for i in range(0,self.hp_potion) :
+            self.hp_image.draw(tmp_x,30,50,50)
+            tmp_x += 60
 
     def add_event(self, key_event) :
         self.q.insert(0,key_event)
@@ -402,9 +411,9 @@ class Player :
                 self.cur_state.enter(self, event)
         
         if self.atk_on :
-            if self.item_level[self.item] == 1 and self.exp == 100:
+            if self.item_level[self.item] == 1 and self.exp == 400:
                 self.level_up()
-            elif self.item_level[self.item] == 2 and self.exp == 120 :
+            elif self.item_level[self.item] == 2 and self.exp == 800:
                 self.level_up()
 
         if self.stamina < 100 and self.atking == False:
