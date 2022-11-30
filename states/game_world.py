@@ -51,6 +51,8 @@ def player_update(player) :
 
 def map_update(_map, player) :
     _map.map_move(int(player.x))
+    if _map.map_type == 0 :
+        clear_monsters()
 
 def world_update(player, _map) :
     player_update(player)
