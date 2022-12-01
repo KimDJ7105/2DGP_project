@@ -67,7 +67,7 @@ def handle_events():
             elif event.key == SDLK_w :
                 if cat.y == 90 :
                     cat.add_jump()
-            elif event.key == SDLK_SPACE:
+            elif event.key == SDLK_SPACE and event.type == SDL_KEYDOWN:
                 if cat.stamina > 30 and cat.roll == False:
                     cat.add_roll()
             elif event.key == SDLK_r and event.type == SDL_KEYUP:
