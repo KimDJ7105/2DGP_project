@@ -448,8 +448,8 @@ class Player :
                 elif self.last_dir == -1 :
                     monster.x -= 25
                 if monster.hp <= 0 :
+                    self.exp += monster.exp
                     monster.get_event(KIA)
-                    self.exp += 5
 
     def heal_hp(self) :
         if self.hp_potion > 0 and self.hp < 5 :

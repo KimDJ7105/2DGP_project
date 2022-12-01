@@ -99,6 +99,7 @@ class Monster :
             self.dir = 1
         self.q = []
         self.cur_state = mRUN
+        self.exp = _hp // 10
 
     def get_distance(self, player) :
         pass
