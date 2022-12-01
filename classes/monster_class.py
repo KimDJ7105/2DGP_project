@@ -50,8 +50,7 @@ class mATTACK :
 class mDEAD :
     @staticmethod
     def enter(self,player) :
-        if self.hp > 0 :
-            player.get_damage(1, self)
+        self.frame = 0
         pass
 
     @staticmethod
@@ -60,7 +59,12 @@ class mDEAD :
 
     @staticmethod
     def do(self,player) :
-        game_world.remove_object(self)
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME* game_framework.frame_time) % 5
+        if int(self.frame) == 2 :
+            if self.hp > 0 :
+                player.get_damage(1, self)
+        if int(self.frame) == 4 :
+            game_world.remove_object(self)
         pass
 
     def draw(self, x) :
@@ -76,9 +80,11 @@ class Monster :
     sprite = None
     dead_sprite = None
 
-    def __init__ (self, _x, _y, name, _speed, _hp, _w,_h) :
+    def __init__ (self, _x, _y, name, dead_name, _speed, _hp, _w,_h) :
         if Monster.sprite == None :
             Monster.sprite = load_image(name)
+        if Monster.dead_sprite == None: 
+            Monster.dead_sprite = load_image(dead_name)
         self.hp = _hp
         self.atk_count = 0
         self.x = _x
@@ -115,30 +121,56 @@ class Monster :
         print(f'get {damage} damage, remain HP {self.hp}')
 
     def draw(self, x) :
-        if x > 400 and x < 1600 :
-            if self.x > x - (400 + self.wide // 2) and self.x < x + (400 + self.wide // 2) :
-                if self.x > x :
-                    self.sprite.clip_composite_draw(int(self.frame)* 150,0,self.wide,self.hight,0,'',400 - (x - self.x), self.y,150,150)
-                    self.dir = -1
-                elif self.x <= x :
-                    self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'h',400 + (self.x -x), self.y,150,150)
-                    self.dir = 1
-        elif x <= 400:
-            if self.x > 0 and self.x < 800 :
-                if self.x > x :
-                    self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'',self.x, self.y,150,150)
-                    self.dir = -1
-                elif self.x <= x :
-                    self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'h',self.x, self.y,150,150)
-                    self.dir = 1
-        elif x >= 1600 :
-            if self.x > 1200 and self.x < 2000 :
-                if self.x > x :
-                    self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'',400 - (1600 - self.x), self.y,150,150)
-                    self.dir = -1
-                elif self.x <= x :
-                    self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'h',400 + (self.x - 1600), self.y,150,150)
-                    self.dir = 1
+        if self.cur_state == mDEAD :
+            if x > 400 and x < 1600 :
+                if self.x > x - (400 + self.wide // 2) and self.x < x + (400 + self.wide // 2) :
+                    if self.x > x :
+                        self.dead_sprite.clip_composite_draw(int(self.frame)* 150,0,self.wide,self.hight,0,'',400 - (x - self.x), self.y,150,150)
+                        self.dir = -1
+                    elif self.x <= x :
+                        self.dead_sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'h',400 + (self.x -x), self.y,150,150)
+                        self.dir = 1
+            elif x <= 400:
+                if self.x > 0 and self.x < 800 :
+                    if self.x > x :
+                        self.dead_sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'',self.x, self.y,150,150)
+                        self.dir = -1
+                    elif self.x <= x :
+                        self.dead_sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'h',self.x, self.y,150,150)
+                        self.dir = 1
+            elif x >= 1600 :
+                if self.x > 1200 and self.x < 2000 :
+                    if self.x > x :
+                        self.dead_sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'',400 - (1600 - self.x), self.y,150,150)
+                        self.dir = -1
+                    elif self.x <= x :
+                        self.dead_sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'h',400 + (self.x - 1600), self.y,150,150)
+                        self.dir = 1
+        else :
+            if x > 400 and x < 1600 :
+                if self.x > x - (400 + self.wide // 2) and self.x < x + (400 + self.wide // 2) :
+                    if self.x > x :
+                        self.sprite.clip_composite_draw(int(self.frame)* 150,0,self.wide,self.hight,0,'',400 - (x - self.x), self.y,150,150)
+                        self.dir = -1
+                    elif self.x <= x :
+                        self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'h',400 + (self.x -x), self.y,150,150)
+                        self.dir = 1
+            elif x <= 400:
+                if self.x > 0 and self.x < 800 :
+                    if self.x > x :
+                        self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'',self.x, self.y,150,150)
+                        self.dir = -1
+                    elif self.x <= x :
+                        self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'h',self.x, self.y,150,150)
+                        self.dir = 1
+            elif x >= 1600 :
+                if self.x > 1200 and self.x < 2000 :
+                    if self.x > x :
+                        self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'',400 - (1600 - self.x), self.y,150,150)
+                        self.dir = -1
+                    elif self.x <= x :
+                        self.sprite.clip_composite_draw(int(self.frame) * 150,0,self.wide,self.hight,0,'h',400 + (self.x - 1600), self.y,150,150)
+                        self.dir = 1
         pass
 
     def get_event(self, event) :
