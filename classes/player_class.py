@@ -320,25 +320,25 @@ next_state = {
 
 class Player :
     def __init__(self) :
-        self.sprite = load_image('player/standard.png')
+        self.sprite = load_image('player/sword.png')
         self.heart = load_image('player/heart.png')
         self.stamina_bar = load_image('player/stamina_bar.png')
         self.x = 400
         self.y = 90
         self.hp = 5
-        self.atk = 0
+        self.atk = 10
         self.frame = 0
         self.dir = 1
         self.last_dir = 1
         self.line = 5 #sprite line
         self.item_level = {'SWORD' : 1,}
-        self.item = None
+        self.item = 'SWORD'
         self.stamina = 100
         self.q = []
         self.cur_state = IDLE
         self.jump = False
         self.roll = False
-        self.atk_on = False
+        self.atk_on = True
         self.atking = False
         self.atked = False
         self.exp = 0
