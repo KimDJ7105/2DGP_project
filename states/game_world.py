@@ -39,6 +39,8 @@ def clear_monsters() :
     for m in monsters :
         monsters.remove(m)
         del m
+    monster_class.Monster.sprite = None
+    monster_class.Monster.dead_sprite = None
 
 def monster_update(player) :
     for monster in monsters :
