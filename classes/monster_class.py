@@ -73,8 +73,12 @@ mNext_state = {
 }
 
 class Monster :
+    sprite = None
+    dead_sprite = None
+
     def __init__ (self, _x, _y, name, _speed, _hp, _w,_h) :
-        self.sprite = load_image(name)
+        if Monster.sprite == None :
+            Monster.sprite = load_image(name)
         self.hp = _hp
         self.atk_count = 0
         self.x = _x
