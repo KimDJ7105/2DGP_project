@@ -411,9 +411,9 @@ class Player :
                 self.cur_state.enter(self, event)
         
         if self.atk_on :
-            if self.item_level[self.item] == 1 and self.exp == 400:
+            if self.item_level[self.item] == 1 and self.exp == 70:
                 self.level_up()
-            elif self.item_level[self.item] == 2 and self.exp == 800:
+            elif self.item_level[self.item] == 2 and self.exp == 220:
                 self.level_up()
 
         if self.stamina < 100 and self.atking == False:
@@ -450,6 +450,7 @@ class Player :
                 if monster.hp <= 0 :
                     self.exp += monster.exp
                     monster.get_event(KIA)
+                    print(self.exp)
 
     def heal_hp(self) :
         if self.hp_potion > 0 and self.hp < 5 :
