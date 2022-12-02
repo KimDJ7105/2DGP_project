@@ -13,6 +13,7 @@ class IDLE :
         elif self.last_dir == -1 :
             self.line = 4
         self.frame = 0
+        self.sound = None
 
     @staticmethod
     def exit(self, boss) :
@@ -57,10 +58,13 @@ class RUN :
             self.dir += 1
             self.line = 3
         self.frame = 0
+        self.sound = load_wav('sound/player/player_footstep.wav')
+        self.sound.repeat_play()
 
     @staticmethod
     def exit(self, boss) :
         self.last_dir = self.dir;
+        
 
     @staticmethod
     def do(self):
@@ -162,6 +166,8 @@ class ATTACK :
             self.stamina -= 20
         else :
             self.add_event(END)
+        self.sound = load_wav('sound/player/player_attack.wav')
+        self.sound.play(1)
 
     @staticmethod
     def exit(self, boss) :
@@ -200,6 +206,8 @@ class HIT : #time parameter needed
             self.frame = 0
             self.line = 10
         self.atked = True
+        self.sound = load_wav('sound/player/player_hit.wav')
+        self.sound.play(1)
         pass
 
     @staticmethod
@@ -278,6 +286,8 @@ class SP_2 :
             self.frame = 4
             self.line = 6
         self.atking = True
+        self.sound = load_wav('sound/player/player_sp.wav')
+        self.sound.play(1)
         pass
 
     @staticmethod
@@ -344,6 +354,9 @@ class Player :
         self.exp = 0
         self.hp_potion = 5
         self.hp_image = load_image('player/potion.png')
+        self.sound = load_wav('sound/player/player_footstep.wav')
+        self.heal_sound = load_wav('sound/player/potion_drink.wav')
+        self.level_up_sound = load_wav('sound/player/player_levelup.wav')
 
     def load(self, state):
         self.atk, self.item , self.item_level , self.exp, self.atk_on = state['atk'], state['item'], state['level'], state['exp'], state['atk_on']
@@ -454,6 +467,7 @@ class Player :
 
     def heal_hp(self) :
         if self.hp_potion > 0 and self.hp < 5 :
+            self.heal_sound.play(1)
             self.hp += 1
             self.hp_potion -= 1
 
@@ -474,6 +488,7 @@ class Player :
                 self.sprite = load_image('player/sword3.png')
 
     def level_up(self) :
+        self.level_up_sound.play()
         if self.atk == 10 :
             self.atk = 25
         elif self.atk == 25 :
