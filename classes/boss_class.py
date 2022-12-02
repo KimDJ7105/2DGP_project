@@ -27,6 +27,8 @@ class mRUN :
             self.x += self.dir * self.speed * game_framework.frame_time
         if (get_time() - mRUN.timer) >= 5 :
             self.get_event(AT)
+        if abs(player.x - self.x)  < 15 :
+            player.get_damage(1,self)
         pass
 
     def draw(self, x) :
@@ -52,7 +54,7 @@ class mATTACK :
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME* game_framework.frame_time) % 6
         mATTACK.effect_frame = (mATTACK.effect_frame + FRAME_PER_ACTION2 * ACTION_PER_TIME2* game_framework.frame_time) % 10
         if int(mATTACK.effect_frame) == 5 :
-            player.get_damage(0, self)
+            player.get_damage(2, self)
         if int(self.frame) == 5 :
             self.get_event(RU)
         pass
