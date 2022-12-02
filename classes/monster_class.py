@@ -50,6 +50,7 @@ class mDEAD :
     @staticmethod
     def enter(self,player) :
         self.frame = 0
+        self.dead_sound.play(1)
         pass
 
     @staticmethod
@@ -99,6 +100,11 @@ class Monster :
         self.q = []
         self.cur_state = mRUN
         self.exp = _hp // 10
+        self.dead_sound = None
+        if _hp == 30 :
+            self.dead_sound = load_wav('sound/monsters/snowman_dead.wav')
+        elif _hp == 90 :
+            self.dead_sound = load_wav('sound/monsters/mummy_dead.wav')
 
     def get_distance(self, player) :
         pass
