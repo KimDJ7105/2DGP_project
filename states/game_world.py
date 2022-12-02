@@ -1,6 +1,7 @@
 import game_framework
 import states.game_over_state as game_over_state
 import classes.monster_class as monster_class
+import classes.boss_class as boss_class
 import parameter.boss_parameter as boss_parameter
 
 spawn = False
@@ -79,6 +80,8 @@ def spawn_monster(_type, _pos):
                 else :
                     add_object(monster_class.Monster(0, 110,'boss/Mummy_R.png','boss/Mummy_BOOM_R.png',boss_parameter.MIRA_RUN_SPEED_PPS, 90, 150, 150),'monster')
             elif _type == 3 :
+                if len(monsters) == 0 :
+                    add_object(boss_class.Boss(1000, 130, 600, 300, 250),'monster')
                 pass
             spawn_timer = 0.0
             print('monster spawned')
