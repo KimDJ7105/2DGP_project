@@ -40,6 +40,7 @@ class mATTACK :
         self.sprite = self.attack_s
         self.frame = 0
         mATTACK.effect_frame = 0
+        self.atk_sound.play(1)
         pass
 
     @staticmethod
@@ -108,6 +109,8 @@ class Boss :
         self.q = []
         self.cur_state = mRUN
         self.exp = _hp // 10
+        self.atk_sound = load_wav('sound/boss/boss_attack.wav')
+        self.atk_sound.set_volume(70)
 
     def deliver_damage(self,start, end, y, player) :
         if player.x >= start and player.x <= end and player.y <= y :
