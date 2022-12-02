@@ -6,6 +6,9 @@ class Map :
         self.background = load_image('map/town.png')
         self.map_type = 0
         self.map_x = 0
+        self.bgm = load_music('sound/map/Town.mp3')
+        self.bgm.set_volume(32)
+        self.bgm.repeat_play()
 
     def draw(self) :
         self.background.draw(400,300,800,600)
@@ -32,6 +35,23 @@ class Map :
     def set_map_type(self,num) :
         self.map_type = num
         self.set_image()
+        self.bgm.stop()
+        if num == 0 :
+            self.bgm = load_music('sound/map/Town.mp3')
+            self.bgm.set_volume(32)
+            self.bgm.repeat_play()
+        elif num == 1 :
+            self.bgm = load_music('sound/map/Snowland.mp3')
+            self.bgm.set_volume(32)
+            self.bgm.repeat_play()
+        elif num == 2 :
+            self.bgm = load_music('sound/map/Desert.mp3')
+            self.bgm.set_volume(32)
+            self.bgm.repeat_play()
+        elif num == 3 :
+            self.bgm = load_music('sound/map/Volcano.mp3')
+            self.bgm.set_volume(32)
+            self.bgm.repeat_play()
 
     def set_image(self) :
         if self.map_type == 0 : #town
