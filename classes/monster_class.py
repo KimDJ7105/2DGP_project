@@ -1,7 +1,6 @@
 from pico2d import *
 from parameter.boss_parameter import *
 import game_framework
-from random import randint
 import states.game_world as game_world
 
 RU, AT, KIA = range(3)
