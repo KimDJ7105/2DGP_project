@@ -6,6 +6,7 @@ import states.stage_clear_state as stage_clear_state
 import states.game_world as game_world
 import states.save_state as save_state
 import states.load_state as load_state
+import states.pause_state as pause_state
 import classes.map_class as map_class
 import classes.player_class as player_class
 
@@ -56,10 +57,11 @@ def handle_events():
     for event in events :
         if event.type == SDL_KEYDOWN or event.type == SDL_KEYUP:
             if event.key == SDLK_s :
-                if cat.x > 1860 and cat.x < 2000 :
-                    game_framework.push_state(map_select_state)
-                else :
-                    game_framework.push_state(save_state)
+                if map.map_type == 0 :
+                    if cat.x > 1860 and cat.x < 2000 :
+                        game_framework.push_state(map_select_state)
+                    else :
+                        game_framework.push_state(save_state)
             elif event.key == SDLK_l :
                 game_framework.push_state(load_state)
             elif event.key == SDLK_z and event.type == SDL_KEYDOWN:
@@ -74,6 +76,8 @@ def handle_events():
                 cat.heal_hp()
             elif event.type == SDL_KEYDOWN and event.key == SDLK_h :
                 cat.hp -= 1
+            elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE :
+                game_framework.push_state(pause_state)
             else :
                 cat.handle_event(event)
         elif event.type == SDL_QUIT :
