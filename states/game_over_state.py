@@ -68,7 +68,7 @@ def handle_events():
             elif event.key == SDLK_RIGHT :
                 if retry == True :
                     retry = False
-            else :
+            elif event.key == SDLK_SPACE :
                 game_framework.pop_state()
         elif event.type == SDL_QUIT :
             game_framework.quit()
