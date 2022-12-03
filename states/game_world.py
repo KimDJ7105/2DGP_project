@@ -71,9 +71,9 @@ def spawn_monster(_type, _pos):
                 spawn = False
             elif _type == 1 :
                 if _pos == 0 :
-                    add_object(monster_class.Monster(2000, 110,'boss/Snowman_R.png','boss/Snowman_R.png',boss_parameter.SNOWMAN_RUN_SPEED_PPS, 30, 150, 150),'monster')
+                    add_object(monster_class.Monster(2000, 110,'boss/Snowman_R.png','boss/Snowman_Dead_R.png',boss_parameter.SNOWMAN_RUN_SPEED_PPS, 30, 150, 150),'monster')
                 else :
-                    add_object(monster_class.Monster(0, 110,'boss/Snowman_R.png','boss/Snowman_R.png',boss_parameter.SNOWMAN_RUN_SPEED_PPS, 30, 150, 150),'monster')
+                    add_object(monster_class.Monster(0, 110,'boss/Snowman_R.png','boss/Snowman_Dead_R.png',boss_parameter.SNOWMAN_RUN_SPEED_PPS, 30, 150, 150),'monster')
             elif _type == 2 :
                 if _pos == 0 :
                     add_object(monster_class.Monster(2000, 110,'boss/Mummy_R.png','boss/Mummy_BOOM_R.png',boss_parameter.MIRA_RUN_SPEED_PPS, 90, 150, 150),'monster')
