@@ -7,6 +7,6 @@ open_canvas()
 
 hide_cursor()
 
-game_framework.run(play_state)
+game_framework.run(title_state)
 
 close_canvas()
