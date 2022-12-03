@@ -127,6 +127,8 @@ class Monster :
         print(f'get {damage} damage, remain HP {self.hp}')
 
     def draw(self, x) :
+        if self.dead_sprite == None or self.draw == None :
+            return
         if self.cur_state == mDEAD :
             if x > 400 and x < 1600 :
                 if self.x > x - (400 + self.wide // 2) and self.x < x + (400 + self.wide // 2) :
