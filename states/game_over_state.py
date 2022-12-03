@@ -31,6 +31,7 @@ def exit():
         play_state.cat.hp = 5
         play_state.cat.hp_potion = 5
         play_state.cat.y = 1000
+    play_state.timer = get_time()
     del retry
     del game_over
     del font
